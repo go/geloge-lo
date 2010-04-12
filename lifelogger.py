@@ -3,6 +3,7 @@ import sys, time
 import urllib
 import urllib2
 import json
+import re
 from datetime import datetime
 from datetime import timedelta
 from xml.dom.minidom import Document
@@ -27,6 +28,13 @@ class pytwit:
   
     return result
 
+def getThumbPic(result):
+  q = re.compile("http://twitpic.com")
+
+  for x in result:
+    if q.search(x['text']):
+      x['text'] = x['text'].replace("http://twitpic.com/", "http://twitpic.com/show/thumb/")
+
 def genKML(result, filename):
   f = open(filename, "w")
   base = Document()
@@ -47,6 +55,7 @@ def genKML(result, filename):
       placemark.appendChild(name)
 
       desc = base.createElement("description")
+      print x['text']
       descText = base.createTextNode(x['text'])
       desc.appendChild(descText)
       placemark.appendChild(desc)
@@ -77,16 +86,25 @@ if __name__ == "__main__":
   size = 1500
 
   path = "/home/go/public_html/maps/"
+  '''
   today = {
     'year':datetime.today().strftime("%Y"),
     'month':datetime.today().strftime("%m"),
     'day':datetime.today().strftime("%d")
   }
+  '''
+  today = {
+    'year':'2010',
+    'month':'04',
+    'day':'09'
+  }
   filename = path+today['year']+today['month']+today['day']+".kml"
+  filename = "tmp.kml"
 
   pytwit = pytwit()
   result = pytwit.search(keyword, lang, size, today)
 
+  getThumbPic(result)
   genKML(result, filename)
 
   '''
