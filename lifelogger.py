@@ -38,6 +38,8 @@ def getThumbPic(result):
 
 def genKML(result, filename):
   f = open(filename, "w")
+  coordlist = []
+
   base = Document()
   kml = base.createElement("kml")
   kml.setAttribute("xmlns", "http://www.opengis.net/kml/2.2")
@@ -56,21 +58,61 @@ def genKML(result, filename):
       placemark.appendChild(name)
 
       desc = base.createElement("description")
-      print x['text']
       descText = base.createTextNode(x['text'])
       desc.appendChild(descText)
       placemark.appendChild(desc)
 
       point = base.createElement("Point")
-      cord = base.createElement("coordinates")
-      cordText = base.createTextNode(str(x['geo']['coordinates'][1])+","+str(x['geo']['coordinates'][0]))
-      cord.appendChild(cordText)
-      point.appendChild(cord)
+      coord = base.createElement("coordinates")
+      coordText = base.createTextNode(str(x['geo']['coordinates'][1])+","+str(x['geo']['coordinates'][0]))
+      coordlist.append(str(x['geo']['coordinates'][1])+","+str(x['geo']['coordinates'][0]))
+      coord.appendChild(coordText)
+      point.appendChild(coord)
       placemark.appendChild(point)
 
       doc.appendChild(placemark)
 
-  
+  # Setting Path
+  placemark = base.createElement("Placemark")
+
+  name = base.createElement("name")
+  nameText = base.createTextNode("Pathway")
+  name.appendChild(nameText)
+  placemark.appendChild(name)
+
+  desc = base.createElement("description")
+  descText = base.createTextNode("This is test pathway")
+  desc.appendChild(descText)
+  placemark.appendChild(desc)
+
+  lineString = base.createElement("LineString")
+  extrude = base.createElement("extrude")
+  extrudeNum = base.createTextNode("1")
+  extrude.appendChild(extrudeNum)
+  tessellate = base.createElement("tessellate")
+  tessellateNum = base.createTextNode("1")
+  tessellate.appendChild(tessellateNum)
+  altitude = base.createElement("altitudeMode")
+  altitudeText = base.createTextNode("absolute")
+  altitude.appendChild(altitudeText)
+  coord = base.createElement("coordinates")
+  for x in coordlist:
+    coordValue = base.createTextNode(x)
+    coord.appendChild(coordValue)
+    space = base.createTextNode(" ")
+    coord.appendChild(space)
+
+  lineString.appendChild(extrude)
+  lineString.appendChild(tessellate)
+  lineString.appendChild(altitude)
+  lineString.appendChild(coord)
+
+  placemark.appendChild(name)
+  placemark.appendChild(desc)
+  placemark.appendChild(lineString)
+
+  doc.appendChild(placemark)
+
   f.write(base.toxml("UTF-8"))
   f.close()
   print "Synced!!"
