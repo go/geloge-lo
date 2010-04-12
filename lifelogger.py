@@ -33,7 +33,8 @@ def getThumbPic(result):
 
   for x in result:
     if q.search(x['text']):
-      x['text'] = x['text'].replace("http://twitpic.com/", "http://twitpic.com/show/thumb/")
+      x['text'] = x['text'].replace('http://twitpic.com/', '<br><img src="http://twitpic.com/show/thumb/')
+      x['text'] = x['text'] + '">'
 
 def genKML(result, filename):
   f = open(filename, "w")
