@@ -2,7 +2,7 @@
 import sys, time
 import urllib
 import urllib2
-import json
+import simplejson
 import re
 from datetime import datetime
 from datetime import timedelta
@@ -23,7 +23,7 @@ class pytwit:
       }
       query = urllib.urlencode(query)
       resdata = urllib2.urlopen(url + "?" + query).read()
-      jdata = json.loads(resdata)
+      jdata = simplejson.loads(resdata)
       result = result + jdata["results"]
   
     return result
