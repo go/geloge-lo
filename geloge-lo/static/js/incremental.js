@@ -64,10 +64,17 @@ function startUI(){
 
 function event_up(){
     var success = geloDataGroup.selectNext();
+    var index = geloDataGroup.getCurrentSelectedIndex();
+    
+    focus_near_by(index);
 }
 
 function event_down(){
     var success =  geloDataGroup.selectPrev();
+    var index = geloDataGroup.getCurrentSelectedIndex();
+
+    focus_near_by(index);
+
     if(success){
         return;
     }
@@ -78,7 +85,18 @@ function event_down(){
         geloDataGroup.drawLine();
     }
     geloDataGroup.selectPrev();
-    setPosition(geloDataGroup);
+    setPosition(geloDataGroup.geloDataList);
+}
+
+function focus_near_by(index){
+    if(index == 0){ 
+        var focusDataList = geloDataGroup.getSlicedGeloList(0, index+2)
+    }
+    else{
+        var focusDataList = geloDataGroup.getSlicedGeloList(index-1, index+2)
+    }
+
+    setPosition(focusDataList);
 }
 
 $(document).keypress(function(event) {

@@ -183,6 +183,10 @@ var GeloDataGroup = function(){
         return null;
     };
 
+    ret.getSlicedGeloList = function(start, end){
+        return geloDataGroup.geloDataList.slice(start, end)
+    };
+
     ret.select = function(geloData, animation){
         var current = this.getCurrentSelected();
         if(current){
@@ -239,16 +243,16 @@ function getBounds(A, B){
     );
 }
 
-function setPosition(geloDataGroup){
-    debug(geloDataGroup.geloDataList[0].marker.position);
-    var lat_max = geloDataGroup.geloDataList[0].marker.position.lat();
-    var lat_min = geloDataGroup.geloDataList[0].marker.position.lat();
-    var lng_max = geloDataGroup.geloDataList[0].marker.position.lng();
-    var lng_min = geloDataGroup.geloDataList[0].marker.position.lng();
+function setPosition(geloDataList){
+    debug(geloDataList[0].marker.position);
+    var lat_max = geloDataList[0].marker.position.lat();
+    var lat_min = geloDataList[0].marker.position.lat();
+    var lng_max = geloDataList[0].marker.position.lng();
+    var lng_min = geloDataList[0].marker.position.lng();
     
-    for(var i = 1; i < geloDataGroup.geloDataList.length; i++){
-        var lat = geloDataGroup.geloDataList[i].marker.position.lat();
-        var lng = geloDataGroup.geloDataList[i].marker.position.lng();
+    for(var i = 1; i < geloDataList.length; i++){
+        var lat = geloDataList[i].marker.position.lat();
+        var lng = geloDataList[i].marker.position.lng();
         
         if(lat_max < lat){ lat_max = lat; }
         if(lng_max < lng){ lng_max = lng; }
@@ -326,7 +330,7 @@ function buildGeroFromJSON(result){
     }
 
     geloDataGroup.drawLine();
-    setPosition(geloDataGroup);
+    setPosition(geloDataGroup.geloDataList);
     $.unblockUI();
 }    
 
