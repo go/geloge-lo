@@ -73,9 +73,8 @@ function event_down(){
     var success =  geloDataGroup.selectPrev();
     var index = geloDataGroup.getCurrentSelectedIndex();
 
-    focus_near_by(index);
-
     if(success){
+        focus_near_by(index);
         return;
     }
     if(buffer_backward.size() > 0){
@@ -85,7 +84,9 @@ function event_down(){
         geloDataGroup.drawLine();
     }
     geloDataGroup.selectPrev();
-    setPosition(geloDataGroup.geloDataList);
+    index = geloDataGroup.getCurrentSelectedIndex();
+    focus_near_by(index);
+    // setPosition(geloDataGroup.geloDataList);
 }
 
 function focus_near_by(index){
