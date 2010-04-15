@@ -27,35 +27,6 @@ class pytwit:
   
     return result
 
-def genKML(result, filename):
-
-  f = open(filename, "w")
-  data = '''<?xml version="1.0" encoding="UTF-8"?>\n
-<kml xmlns="http://www.opengis.net/kml/2.2">\n
-<Document>\n
-  '''
-  for x in result:
-    if x["geo"] != None:
-      data += "<Placemark>\n"
-      data += "<name>"
-      data += chUTC2JST(x["created_at"])
-      data += "</name>\n"
-      data += "<description>"
-      data += x["text"]
-      data += "</description>\n"
-      data += "<Point>\n"
-      data += "<coordinates>"
-      data += str(x["geo"]["coordinates"][1])+","+str(x["geo"]["coordinates"][0])
-      data += "</coordinates>\n"
-      data += "</Point>\n"
-      data += "</Placemark>\n"
-
-  data += "</Document>\n"
-  data += "</kml>"
-  data = data.encode("utf-8")
-  f.write(data)
-  f.close()
-  print "Synced!!"
   
 def genKML2(result, filename):
   f = open(filename, "w")
@@ -93,6 +64,7 @@ def genKML2(result, filename):
   
   f.write(base.toxml("UTF-8"))
   f.close()
+  print "Synced!!"
 
 def chUTC2JST(post_time):
   date = datetime.strptime(post_time, "%a, %d %b %Y %H:%M:%S +0000")
