@@ -1,14 +1,10 @@
+var markers = [];
 var map;
-var kinsityo;
-var myhome;
-var points = [];
-var pointer = 0;
 var zoom;
 var date = new Date();
 function debug(val){
     document.getElementById("debug").innerHTML = val;
 }
-n
 
 function getBounds(A, B){
     var ymax = A.lat() > B.lat() ? A.lat() : B.lat();
@@ -34,7 +30,7 @@ function setPosition(){
 
 function initialize() {
     var myOptions = {
-        zoom: 1,
+        zoom: 13,
         //center: points[0],
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -46,11 +42,7 @@ function initialize() {
     map.setCenter(new google.maps.LatLng(35.656738,139.787636));
 }
 
-function start(){
-    setPosition();
-    
-}
-var markers = [];
+
 function jsontest(){
     $.getJSON( "./ossan.json", "", function(result){
                    debug("hoge");
