@@ -38,7 +38,7 @@ def getThumbPic(result):
 
 def genKML(result, filename):
   f = open(filename, "w")
-  coordlist = []
+  coordlist = ""
 
   base = Document()
   kml = base.createElement("kml")
@@ -48,75 +48,45 @@ def genKML(result, filename):
   doc = base.createElement("Document")
   kml.appendChild(doc)
 
+  # Add each places
   for x in result:
     if x["geo"] != None:
-      placemark = base.createElement("Placemark")
+      placemark = addElement(element="Placemark", textNode=None, parent=doc, base=base)
+      addElement(element="name", textNode=chUTC2JST(x['created_at']), parent=placemark, base=base)
+      addElement(element="description", textNode=x['text'], parent=placemark, base=base)
+      point = addElement(element="Point", textNode=None, parent=placemark, base=base)
+      lang = str(x['geo']['coordinates'][0])
+      lat = str(x['geo']['coordinates'][1])
 
-      name = base.createElement("name")
-      nameText = base.createTextNode(chUTC2JST(x['created_at']))
-      name.appendChild(nameText)
-      placemark.appendChild(name)
+      addElement(element="coordinates", textNode=lat+','+lang, parent=point, base=base)
+      coordlist = coordlist + lat+","+lang+" "
 
-      desc = base.createElement("description")
-      descText = base.createTextNode(x['text'])
-      desc.appendChild(descText)
-      placemark.appendChild(desc)
 
-      point = base.createElement("Point")
-      coord = base.createElement("coordinates")
-      coordText = base.createTextNode(str(x['geo']['coordinates'][1])+","+str(x['geo']['coordinates'][0]))
-      coordlist.append(str(x['geo']['coordinates'][1])+","+str(x['geo']['coordinates'][0]))
-      coord.appendChild(coordText)
-      point.appendChild(coord)
-      placemark.appendChild(point)
+  # Add Path info
+  placemark = addElement(element="Placemark", textNode=None, parent=doc, base=base)
+  addElement(element="name", textNode="Pathway", parent=placemark, base=base)
+  addElement(element="description", textNode="This is test pathway", parent=placemark, base=base)
 
-      doc.appendChild(placemark)
+  lineString = addElement(element="LineString", textNode=None, parent=placemark, base=base)
+  addElement(element="extrude", textNode="1", parent=lineString, base=base)
+  addElement(element="tessellate", textNode="1", parent=lineString, base=base)
+  addElement(element="altitudeMode", textNode="absolute", parent=lineString, base=base)
 
-  # Setting Path
-  placemark = base.createElement("Placemark")
-
-  name = base.createElement("name")
-  nameText = base.createTextNode("Pathway")
-  name.appendChild(nameText)
-  placemark.appendChild(name)
-
-  desc = base.createElement("description")
-  descText = base.createTextNode("This is test pathway")
-  desc.appendChild(descText)
-  placemark.appendChild(desc)
-
-  lineString = base.createElement("LineString")
-  extrude = base.createElement("extrude")
-  extrudeNum = base.createTextNode("1")
-  extrude.appendChild(extrudeNum)
-  tessellate = base.createElement("tessellate")
-  tessellateNum = base.createTextNode("1")
-  tessellate.appendChild(tessellateNum)
-  altitude = base.createElement("altitudeMode")
-  altitudeText = base.createTextNode("absolute")
-  altitude.appendChild(altitudeText)
-  coord = base.createElement("coordinates")
-  for x in coordlist:
-    coordValue = base.createTextNode(x)
-    coord.appendChild(coordValue)
-    space = base.createTextNode(" ")
-    coord.appendChild(space)
-
-  lineString.appendChild(extrude)
-  lineString.appendChild(tessellate)
-  lineString.appendChild(altitude)
-  lineString.appendChild(coord)
-
-  placemark.appendChild(name)
-  placemark.appendChild(desc)
-  placemark.appendChild(lineString)
-
-  doc.appendChild(placemark)
+  coord = addElement(element="coordinates", textNode=coordlist, parent=lineString, base=base)
 
   f.write(base.toxml("UTF-8"))
   f.close()
   print "Synced!!"
 
+def addElement(element=None, textNode=None, parent=None, base=None):
+      tmpElement = base.createElement(element)
+      if textNode:
+        tmpTxtNode = base.createTextNode(textNode)
+        tmpElement.appendChild(tmpTxtNode)
+      parent.appendChild(tmpElement)
+
+      return tmpElement
+  
 def chUTC2JST(post_time):
   date = datetime.strptime(post_time, "%a, %d %b %Y %H:%M:%S +0000")
   date = date + timedelta(hours=9)
