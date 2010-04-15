@@ -3,13 +3,14 @@ import sys, time
 import urllib
 import urllib2
 import json
+import re
 from datetime import datetime
 from datetime import timedelta
 from xml.dom.minidom import Document
 
 class pytwit:
   def search(self, keyword, lang, size, today):
-    url = "http://search.twitter.com/search.json?"
+    url = "http://search.twitter.com/search.json"
     result=[]
 
     for page in range(1,16):
@@ -27,9 +28,18 @@ class pytwit:
   
     return result
 
-  
-def genKML2(result, filename):
+def getThumbPic(result):
+  q = re.compile("http://twitpic.com")
+
+  for x in result:
+    if q.search(x['text']):
+      x['text'] = x['text'].replace('http://twitpic.com/', '<br><img src="http://twitpic.com/show/thumb/')
+      x['text'] = x['text'] + '">'
+
+def genKML(result, filename):
   f = open(filename, "w")
+  coordlist = []
+
   base = Document()
   kml = base.createElement("kml")
   kml.setAttribute("xmlns", "http://www.opengis.net/kml/2.2")
@@ -53,15 +63,56 @@ def genKML2(result, filename):
       placemark.appendChild(desc)
 
       point = base.createElement("Point")
-      cord = base.createElement("coordinates")
-      cordText = base.createTextNode(str(x['geo']['coordinates'][1])+","+str(x['geo']['coordinates'][0]))
-      cord.appendChild(cordText)
-      point.appendChild(cord)
+      coord = base.createElement("coordinates")
+      coordText = base.createTextNode(str(x['geo']['coordinates'][1])+","+str(x['geo']['coordinates'][0]))
+      coordlist.append(str(x['geo']['coordinates'][1])+","+str(x['geo']['coordinates'][0]))
+      coord.appendChild(coordText)
+      point.appendChild(coord)
       placemark.appendChild(point)
 
       doc.appendChild(placemark)
 
-  
+  # Setting Path
+  placemark = base.createElement("Placemark")
+
+  name = base.createElement("name")
+  nameText = base.createTextNode("Pathway")
+  name.appendChild(nameText)
+  placemark.appendChild(name)
+
+  desc = base.createElement("description")
+  descText = base.createTextNode("This is test pathway")
+  desc.appendChild(descText)
+  placemark.appendChild(desc)
+
+  lineString = base.createElement("LineString")
+  extrude = base.createElement("extrude")
+  extrudeNum = base.createTextNode("1")
+  extrude.appendChild(extrudeNum)
+  tessellate = base.createElement("tessellate")
+  tessellateNum = base.createTextNode("1")
+  tessellate.appendChild(tessellateNum)
+  altitude = base.createElement("altitudeMode")
+  altitudeText = base.createTextNode("absolute")
+  altitude.appendChild(altitudeText)
+  coord = base.createElement("coordinates")
+  for x in coordlist:
+    coordValue = base.createTextNode(x)
+    coord.appendChild(coordValue)
+    space = base.createTextNode(" ")
+    coord.appendChild(space)
+
+  lineString.appendChild(extrude)
+  lineString.appendChild(tessellate)
+  lineString.appendChild(altitude)
+  lineString.appendChild(coord)
+
+  placemark.appendChild(name)
+  placemark.appendChild(desc)
+  placemark.appendChild(lineString)
+
+  doc.appendChild(placemark)
+
   f.write(base.toxml("UTF-8"))
   f.close()
   print "Synced!!"
@@ -78,17 +129,26 @@ if __name__ == "__main__":
   size = 1500
 
   path = "/home/go/public_html/maps/"
+  '''
   today = {
     'year':datetime.today().strftime("%Y"),
     'month':datetime.today().strftime("%m"),
     'day':datetime.today().strftime("%d")
   }
+  '''
+  today = {
+    'year':'2010',
+    'month':'04',
+    'day':'09'
+  }
   filename = path+today['year']+today['month']+today['day']+".kml"
+  filename = "tmp.kml"
 
   pytwit = pytwit()
   result = pytwit.search(keyword, lang, size, today)
 
-  genKML2(result, filename)
+  getThumbPic(result)
+  genKML(result, filename)
 
   '''
   for x in result:
