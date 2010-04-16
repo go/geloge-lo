@@ -6,3 +6,10 @@ class Tweet(db.Model):
     text = db.StringProperty()
     lat = db.FloatProperty()
     lng = db.FloatProperty()
+
+    @classmethod
+    def getTweetsByUser(self, user):
+        tweets = db.GqlQuery('SELECT * FROM Tweet WHERE uid = ' + str(user.uid) + ' ORDER BY tid DESC')
+        return tweets
+        
+    

@@ -44,7 +44,8 @@ function initialize() {
 
 
 function jsontest(){
-    $.getJSON( "./ossan.json", "", function(result){
+    var account = $("#account").val();
+    $.getJSON( "/get_user_gelo.json?account=" + account, "", function(result){
                    debug("hoge");
                    for(i in result){
                        var marker = new google.maps.Marker({
