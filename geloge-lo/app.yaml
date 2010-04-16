@@ -4,6 +4,18 @@ runtime: python
 api_version: 1
 
 handlers:
+- url: /tool/adduser
+  script: tool/adduser.py
+- url: /tool/getuser
+  script: tool/getuser.py
+- url: /tool/addtweet
+  script: tool/addtweet.py
+- url: /tool/gettweet
+  script: tool/gettweet.py
+
+- url: /internal/add_user_to_queue
+  script: internal/add_user_to_queue.py
+
 - url: /get_timeline
   script: get_timeline.py
 - url: /static

@@ -1,9 +1,9 @@
 import urllib2
 
 api_host = 'twitter.com'
-def apicall(path, response_type, uid):
+def apicall(path, response_type, param):
     # TODO error handling
-    url = build_api_url(path, response_type, {'id' : uid})
+    url = build_api_url(path, response_type, param)
     resp = urllib2.urlopen(url)
     body = resp.read()
     return body

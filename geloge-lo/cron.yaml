@@ -1,0 +1,4 @@
+cron:
+- description: database updater
+  url: /internal/add_user_to_queue
+  schedule: every 1 minutes
