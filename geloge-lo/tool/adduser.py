@@ -1,6 +1,6 @@
 from google.appengine.ext.webapp.util import run_wsgi_app
 import cgi
-import pprint
+from gelotter.users import show
 from gelodata.user import User
 
 def application ( environ, start_response ):
@@ -8,15 +8,22 @@ def application ( environ, start_response ):
     form = cgi.FieldStorage(fp=environ['wsgi.input'], 
                             environ=environ)
 
-    if not form.has_key('name'):
-        return "please input name"
-        
-    user = User()
-    if form.has_key('uid'):
-        user.uid = int(form['uid'].value)
-    user.name = form['name'].value
-    if form.has_key('screen_name'):
-        user.screen_name = form['screen_name'].value
+    if not form.has_key('account'):
+        return "please input account"
+    
+    account = form['account'].value
+
+    user = User.get_user(account)
+    if not user:
+        user = User()
+
+    user_info = show(account)
+
+
+    user.uid = user_info['id']
+    user.name = user_info['name']
+    user.screen_name = user_info['screen_name']
+
     user.put()
     
     return "OK"

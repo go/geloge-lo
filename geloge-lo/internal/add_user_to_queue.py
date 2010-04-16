@@ -13,10 +13,9 @@ def application ( environ, start_response ):
 
     users = db.GqlQuery('SELECT * FROM User')
     for user in users:
-        task = Task(payload=None, countdown =60, method = 'GET', url = '/get_timeline?username=' + user.name)
-        print task
+        task = Task(payload=None, countdown =60, method = 'GET', url = '/get_timeline?account=' + user.screen_name)
         task.add()
-        print user.name
+        print user.screen_name
     return "OK"
 
 

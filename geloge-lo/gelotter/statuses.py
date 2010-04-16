@@ -1,6 +1,4 @@
-import urllib2
 import gelotter.common
-import sys
 from django.utils import simplejson as json
 
 def user_timeline(uid, since_id = None):

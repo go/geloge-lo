@@ -7,29 +7,22 @@ from gelodata.tweet import Tweet
 import cgi
 import pprint
 
-def get_highest_tid(username):
+def get_highest_tid(account):
     ret = None
     last_tweet = None
 
-    user = get_user(username)
+    user = User.get_user(account)
     tweets = db.GqlQuery('SELECT * FROM Tweet WHERE uid = ' + str(user.uid) + ' ORDER BY tid DESC')
-    if tweets.count !=  0:
+    if tweets.count() >  0:
         last_tweet = tweets[0]
 
     if last_tweet:
         ret = str(last_tweet.tid)
     return ret
     
-def get_tweets(username):
-    since_id = get_highest_tid(username)
-    return user_timeline(username, since_id)
-
-def get_user(username):
-    ret = None
-    users = db.GqlQuery('SELECT * FROM User WHERE name = \'' + username + '\'')
-    if users.count != 0:
-        ret = users[0]
-    return ret
+def get_tweets(account):
+    since_id = get_highest_tid(account)
+    return user_timeline(account, since_id)
 
 def update_user(user, user_info):
     user.uid = user_info['id']
@@ -39,7 +32,7 @@ def update_user(user, user_info):
 
 def add_tweet(tweet_info):
     lat = 0.0
-    lat = 0.0
+    lng = 0.0
     if tweet_info['coordinates']:
         lat = float(tweet_info['coordinates']['coordinates'][0])
         lng = float(tweet_info['coordinates']['coordinates'][1])
@@ -58,11 +51,11 @@ def application ( environ, start_response ):
     form = cgi.FieldStorage(fp=environ['wsgi.input'], 
                             environ=environ)
 
-    if not form.has_key('username'):
-        return "please input username"
-    username = form['username'].value
+    if not form.has_key('account'):
+        return "please input account"
+    account = form['account'].value
 
-    tweets = get_tweets(username)
+    tweets = get_tweets(account)
     
     if not tweets:
         return "tweet not found"
@@ -71,7 +64,7 @@ def application ( environ, start_response ):
     pprint.pprint(tweets)
 
     # get user object
-    user = get_user(username)
+    user = User.get_user(account)
     if not user:
         user = User()
 
