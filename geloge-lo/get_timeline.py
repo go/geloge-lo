@@ -3,6 +3,7 @@ from gelotter.statuses import user_timeline
 from google.appengine.ext import db
 from gelodata.user import User
 from gelodata.tweet import Tweet
+from datetime import datetime
 
 import cgi
 import pprint
@@ -31,8 +32,8 @@ def update_user(user, user_info):
     user.put()
 
 def add_tweet(tweet_info):
-    lat = 0.0
-    lng = 0.0
+    lat = None
+    lng = None
     if tweet_info['coordinates']:
         lat = float(tweet_info['coordinates']['coordinates'][0])
         lng = float(tweet_info['coordinates']['coordinates'][1])
@@ -41,8 +42,11 @@ def add_tweet(tweet_info):
     new_tweet.uid = tweet_info['user']['id']
     new_tweet.tid = tweet_info['id']
     new_tweet.text = tweet_info['text']
-    new_tweet.lat = lat
-    new_tweet.lng = lng
+    if lat and lng:
+        new_tweet.lat = lat
+        new_tweet.lng = lng
+    new_tweet.time = datetime.strptime(tweet_info['created_at'], "%a %b %d %H:%M:%S +0000 %Y")
+
     new_tweet.put()
     
     

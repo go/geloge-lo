@@ -12,6 +12,8 @@ handlers:
   script: tool/addtweet.py
 - url: /tool/gettweet
   script: tool/gettweet.py
+- url: /tool/deltweet
+  script: tool/deltweet.py
 
 - url: /internal/add_user_to_queue
   script: internal/add_user_to_queue.py
