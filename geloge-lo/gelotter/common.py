@@ -1,12 +1,18 @@
 import urllib2
-
+import logging
 api_host = 'twitter.com'
 def apicall(path, response_type, param):
-    # TODO error handling
+    ret = None
     url = build_api_url(path, response_type, param)
-    resp = urllib2.urlopen(url)
-    body = resp.read()
-    return body
+
+    try:
+        resp = urllib2.urlopen(url)
+        ret = resp.read()
+    except (urllib2.HTTPError, urllib2.URLError), error:
+        logging.error( str(type(error)) + "error at " + url)
+        logging.error(error)
+
+    return ret
 
 def build_api_url(path, response_type, param):
     ret = ''.join(['http://', api_host + path, '.', response_type])

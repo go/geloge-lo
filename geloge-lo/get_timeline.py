@@ -7,13 +7,15 @@ from datetime import datetime
 
 import cgi
 import pprint
-
+import logging
 def get_highest_tid(account):
     ret = None
     last_tweet = None
 
     user = User.get_user(account)
-    tweets = db.GqlQuery('SELECT * FROM Tweet WHERE uid = ' + str(user.uid) + ' ORDER BY tid DESC')
+    qs = 'SELECT * FROM Tweet WHERE uid = ' + str(user.uid) + ' ORDER BY tid DESC'
+    logging.info(qs)
+    tweets = db.GqlQuery(qs)
     if tweets.count() >  0:
         last_tweet = tweets[0]
 
@@ -51,6 +53,7 @@ def add_tweet(tweet_info):
     
     
 def application ( environ, start_response ):
+    logging.getLogger().setLevel(logging.INFO)
     start_response('200 OK', [('Content-Type', 'text/plain')])
     form = cgi.FieldStorage(fp=environ['wsgi.input'], 
                             environ=environ)

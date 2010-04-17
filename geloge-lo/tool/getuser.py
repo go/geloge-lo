@@ -3,19 +3,26 @@ import cgi
 import pprint
 from google.appengine.ext import db
 from gelodata.user import User
+import logging
 
 def application ( environ, start_response ):
+    logging.getLogger().setLevel(logging.INFO)
+
     start_response('200 OK', [('Content-Type', 'text/plain')])
     form = cgi.FieldStorage(fp=environ['wsgi.input'], 
                             environ=environ)
-    if not form.has_key('name'):
-        return "please input name"
+    if not form.has_key('account'):
+        return "please input account"
 
-    user = db.GqlQuery('SELECT * FROM User WHERE name = \'' + form['name'].value + '\'')[0]
+    qs = 'SELECT * FROM User WHERE screen_name = \'' + form['account'].value + '\''
+    logging.info(qs)
+    user = db.GqlQuery(qs)[0]
     print user
     print user.uid
     print user.name
     print user.screen_name
+    
+
     return "OK"
 
 

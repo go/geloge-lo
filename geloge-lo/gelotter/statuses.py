@@ -8,5 +8,7 @@ def user_timeline(uid, since_id = None):
         param['since_id'] = since_id
 
     body = gelotter.common.apicall('/statuses/user_timeline', 'json' , param)
-    data = json.loads(body)
+    data = None
+    if body:
+        data = json.loads(body)
     return data

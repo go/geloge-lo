@@ -3,23 +3,27 @@
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <script type="text/javascript" src="./js/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript" src="./js/geloge-lo.js">
+<script type="text/javascript" src="./js/jquery.query-2.1.7.js"></script>
+<script type="text/javascript" src="./js/geloge-lo.js"></script>
+
 
 </script>
 </head>
 
 <body onload="initialize()">
-  </form>
-  <div style="width: 50%; margin: 0 auto; text-align: left;">
-    <div style="width:50%; height:50%; position: fixed; top: 10px; margin: 0 auto;">
-      <form action="javascript:jsontest()">
+
+  <div style="width: 45%; margin: 0 auto; text-align: left;">
+    <div style="width:50%; height:95%; position: fixed; top: 1%; left: 1%; margin: 0 auto;">
+      <form action="javascript:getUserGelo()">
         account<input id="account" type="text" />
-        <input type="button" value="json" onclick="javascript:jsontest()" /><br />
+        <input type="button" value="json" onclick="javascript:getUserGelo()" /><br />
         <div id="map_canvas" style="width:100%; height:90%;"></div>
+      </form>
     </div>
-    <div style="width:50%; height:50%;"></div>
-    <div id="timeline"></div>
-    <div id="debug"></div>
+    <div style="width:100%; height:95%; top: 1%; right: 1%; margin-left: 60%;">
+      <div id="timeline"></div>
+      <div id="debug"></div>
+    </div>
   </div>
 </body>
 </html>
