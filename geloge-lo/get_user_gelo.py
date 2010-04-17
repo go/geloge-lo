@@ -22,9 +22,12 @@ def application ( environ, start_response ):
     data = []
     for tw in tweets:
         tw_data = []
-        tw_data.append('!title!')
+        tw_data.append(str(tw.time))
         tw_data.append(tw.text)
-        tw_data.append([tw.lat, tw.lng])
+        if tw.lat and tw.lng:
+            tw_data.append([tw.lat, tw.lng])
+        else:
+            tw_data.append(None)
         data.append(tw_data)
     print json.dumps(data)
 
