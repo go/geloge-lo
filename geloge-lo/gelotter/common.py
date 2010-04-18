@@ -9,8 +9,8 @@ def apicall(path, response_type, param):
         resp = urllib2.urlopen(url)
         ret = resp.read()
     except (urllib2.HTTPError, urllib2.URLError), error:
-        logging.error( str(type(error)) + "error at " + url)
-        logging.error(error)
+        logging.info( str(type(error)) + "error at " + url)
+        logging.info(error)
 
     return ret
 
