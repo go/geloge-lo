@@ -3,6 +3,11 @@ var map;
 var zoom;
 var date = new Date();
 var selected = 0;
+var debug_enable = false;
+
+var tweet_color = 'rgb(150, 150, 150)';
+var tweet_color_giotagged = 'rgb(0, 0, 0)';
+var tweet_color_selected = 'rgb(255, 0, 0)';
 
 function stringToDate(datestr){
     var datetime = datestr.split(' ');
@@ -32,8 +37,31 @@ var GeloElementFromJSON = function(datestr, text, gelo){
 
 var GeloData = function(marker,  htmlElement){
     var ret = new Object();
+    ret.isSelected = false;
     ret.marker = marker;
     ret.htmlElement = htmlElement;
+    ret.select = function(animation){
+        var marker = this.marker;
+        if(marker){
+            marker.infoWindow.open(map, marker);
+            $(this.htmlElement).css('color', tweet_color_selected);
+        }
+        var top = $(this.htmlElement).offset().top;
+        if(animation){
+            $('html,body').animate({ scrollTop: top }, 'slow');            
+        }else{
+            $('html,body').scrollTop(top);
+        }
+        
+        this.isSelected = true;
+    };
+
+    ret.unselect = function(){
+        this.marker.infoWindow.close();
+        $(this.htmlElement).css('color', tweet_color_giotagged);
+        this.isSelected = false;
+    };
+
     return ret;
 };
 
@@ -42,7 +70,26 @@ var GeloDataGroup = function(){
     ret.geloDataList = [];
 
     ret.push = function(geloData){
+        geloData.parent = this;
         this.geloDataList.push(geloData);
+    };
+
+    ret.getGeloDataByMarker = function(marker){
+        for(var i in this.geloDataList){
+            if(this.geloDataList[i].marker == marker){
+                return this.geloDataList[i];
+            }
+        }
+        return null;
+    };
+
+    ret.getGeloDataByHtmlElement = function(htmlElement){
+        for(var i in this.geloDataList){
+            if(this.geloDataList[i].htmlElement == htmlElement){
+                return this.geloDataList[i];
+            }
+        }
+        return null;
     };
 
     ret.getHtmlElementByMarker = function(marker){
@@ -114,27 +161,42 @@ var GeloDataGroup = function(){
     };
 
     ret.getCurrentSelected = function(){
-        for(var i in this.geloDataList){
-            if($(this.geloDataList[i].htmlElement).css('color') == 'red'){
-                return this.geloDataList[i];
+        var index = this.getCurrentSelectedIndex();
+        if(index != null){
+            return this.geloDataList[index];
+        }
+        return null;
+    };
+
+    ret.getCurrentSelectedIndex = function(){
+        for(var i  = 0; i < this.geloDataList.length; i++){
+            if(this.geloDataList[i].isSelected){
+                return i;
             }
         }
         return null;
     };
 
-    ret.selectRelative = function(diff){
-        var cur = this.getCurrentSelected();
-        for(var i = 0; i < this.geloDataList.length; i++){
-            if(this.geloDataList[i] == cur){
-                if(!this.geloDataList[i+diff]){
-                    debug("are-?");
-                    return;
-                }
-                this.geloDataList[i+diff].htmlElement.onclick();                    
-                debug("are-clicksitakedo");
-                return;
-            }
+    ret.select = function(geloData, animation){
+        var current = this.getCurrentSelected();
+        if(current){
+            current.unselect();
         }
+        geloData.select(animation);
+    };
+
+    ret.selectRelative = function(diff){
+        var index = this.getCurrentSelectedIndex();
+        if(index  == null){
+            this.geloDataList[0].select();
+            return;
+        }
+        if(!this.geloDataList[index+diff]){
+            return;
+        }
+        this.geloDataList[index].unselect();        
+        this.geloDataList[index+diff].select();        
+        return;
     };
 
     ret.selectPrev = function(){
@@ -149,6 +211,10 @@ var GeloDataGroup = function(){
 };
 
 function debug(val){
+    if(!debug_enable){
+        return;
+    }
+
     var elem = document.getElementById("debug");
     if(elem){
         elem.innerHTML = val;        
@@ -217,35 +283,25 @@ function createMarker(gelodata){
 
 function addGeloMarker(geloDataGroup, geloelem){
     var tweet = document.createElement("div");
+    $(tweet).css('color', tweet_color);
     var marker = null;
-    if(geloelem.gelo){ // if geolocation found
+    if(geloelem.gelo){ // if geolocation foun
+        $(tweet).css('color', tweet_color_giotagged);
         marker = createMarker(geloelem);
         var geloData = new GeloData(marker, tweet);
         marker.geloParent = geloDataGroup;
         geloDataGroup.push(geloData);
         google.maps.event.addListener(marker, 'click', function() {
-                                          marker.geloParent.closeAllInfoWindow();
-                                          this.infoWindow.open(map,this);
-                                          marker.geloParent.cssForAllHtmlElements('color', 'black');
-
-                                          var tweet = this.geloParent.getHtmlElementByMarker(this);
-                                          $(tweet).css('color', 'red');
-                                          var top = $(tweet).offset().top;
-                                          $('html,body').animate({ scrollTop: top }, 'fast');
+                                          var geloData = marker.geloParent.getGeloDataByMarker(marker);
+                                          marker.geloParent.select(geloData, true);
                                       });
     }
     tweet.geloParent = geloDataGroup;
-    tweet.onclick = function(){
-        this.geloParent.closeAllInfoWindow();
-        this.geloParent.cssForAllHtmlElements("color", "black");
-        var marker = this.geloParent.getMarkerByHtmlElement(this);
-        if(marker){
-            marker.infoWindow.open(map, marker);
-            $(this).css('color', 'red');
-        }
-        var top = $(this).offset().top;
-        $('html,body').animate({ scrollTop: top }, 'fast');
+    tweet.onclick = function(mouseEvent){
+        var geloData = this.geloParent.getGeloDataByHtmlElement(this);
+        this.geloParent.select(geloData, true);
     };
+
     tweet.innerHTML = 
         '<span>' + geloelem.text + '</span>' +
         '<br />' +
@@ -265,6 +321,7 @@ function receiveGeloJsonCallback(result){
 
     geloDataGroup.drawLine();
     setPosition(geloDataGroup);
+    $.unblockUI();
 }    
 
 function getUserGelo(){
@@ -274,6 +331,7 @@ function getUserGelo(){
     $("#timeline").empty();
     
     var account = $("#account").val();
+    $.blockUI({message: "Loading Information for " + account});
     $.getJSON( "/get_user_gelo.json?account=" + account, "", receiveGeloJsonCallback);
 }
 
@@ -288,16 +346,23 @@ function event_down(){
 $(document).keypress(function(event) {
                          var up_key = 107; // k
                          var down_key = 106; //j
-                         if(event.keyCode == up_key){
+                         var pressed_key = event.which;
+                         if(pressed_key == up_key){
+                             debug("up");
                              event_up();
                          }
-                         if(event.keyCode == down_key){
+                         if(pressed_key == down_key){
+                             debug("down");
                              event_down();
                          }
                      });
 
 $(document).ready(function(){
                       geloDataGroup = GeloDataGroup();
+                      if($.query.get('debug')){
+                          debug_enable = true;
+                      }
+
                       var account = $.query.get('account');
                       if(account){
                           $("#account").val(account);    
