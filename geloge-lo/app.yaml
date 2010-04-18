@@ -4,6 +4,9 @@ runtime: python
 api_version: 1
 
 handlers:
+- url: /test
+  script: test.py
+
 - url: /tool/adduser
   script: tool/adduser.py
 - url: /tool/getuser

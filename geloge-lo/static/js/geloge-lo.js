@@ -189,22 +189,22 @@ var GeloDataGroup = function(){
         var index = this.getCurrentSelectedIndex();
         if(index  == null){
             this.geloDataList[0].select();
-            return;
+            return true;
         }
         if(!this.geloDataList[index+diff]){
-            return;
+            return false;
         }
         this.geloDataList[index].unselect();        
         this.geloDataList[index+diff].select();        
-        return;
-    };
-
-    ret.selectPrev = function(){
-        this.selectRelative(-1);
+        return true;
     };
 
     ret.selectNext = function(){
-        this.selectRelative(1);
+        return this.selectRelative(-1);
+    };
+
+    ret.selectPrev = function(){
+        return this.selectRelative(1);
     };
 
     return ret;
@@ -269,7 +269,7 @@ function createMarker(gelodata){
                                             position: new google.maps.LatLng(gelodata.gelo[1], 
                                                                              gelodata.gelo[0]), 
                                             map: map, 
-                                            title: i
+                                            title: 'Geloge-Lo'
                                         });
     marker.infoWindow = new google.maps.InfoWindow({
                                                        content: '<div style="height:200px;">' +
@@ -313,7 +313,7 @@ function addGeloMarker(geloDataGroup, geloelem){
     $("#timeline").append($(document.createElement('hr')));
 }
 
-function receiveGeloJsonCallback(result){
+function buildGeroFromJSON(result){
     for(i in result){
         var geloelem = new GeloElementFromJSON(result[i][0], result[i][1], result[i][2]);
         addGeloMarker(geloDataGroup, geloelem);
@@ -324,52 +324,15 @@ function receiveGeloJsonCallback(result){
     $.unblockUI();
 }    
 
-function getUserGelo(){
-    geloDataGroup.closeAllInfoWindow();
-    geloDataGroup.eraseLine();
-    geloDataGroup.removeAll();
-    $("#timeline").empty();
-    
-    var account = $("#account").val();
-    $.blockUI({message: "Loading Information for " + account});
-    $.getJSON( "/get_user_gelo.json?account=" + account, "", receiveGeloJsonCallback);
-}
 
 function event_up(){
-    geloDataGroup.selectPrev();
-}
-
-function event_down(){
     geloDataGroup.selectNext();
 }
 
-$(document).keypress(function(event) {
-                         var up_key = 107; // k
-                         var down_key = 106; //j
-                         var pressed_key = event.which;
-                         if(pressed_key == up_key){
-                             debug("up");
-                             event_up();
-                         }
-                         if(pressed_key == down_key){
-                             debug("down");
-                             event_down();
-                         }
-                     });
+function event_down(){
+    geloDataGroup.selectPrev();
+}
 
-$(document).ready(function(){
-                      geloDataGroup = GeloDataGroup();
-                      if($.query.get('debug')){
-                          debug_enable = true;
-                      }
 
-                      var account = $.query.get('account');
-                      if(account){
-                          $("#account").val(account);    
-                          getUserGelo();
-                      }
-                      
-                  });
-                  
 debug("ok");
 

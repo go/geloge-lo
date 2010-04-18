@@ -6,16 +6,18 @@
 <script type="text/javascript" src="./js/jquery.query-2.1.7.js"></script>
 <script type="text/javascript" src="./js/jquery.blockUI.js"></script>
 <script type="text/javascript" src="./js/geloge-lo.js"></script>
-<script type="text/javascript" src="./js/publish.js"></script>
+<script type="text/javascript" src="./js/incremental.js"></script>
+
+</script>
 </head>
 
 <body onload="initialize()">
 
   <div style="width: 45%; margin: 0 auto; text-align: left;">
     <div style="width:50%; height:95%; position: fixed; top: 1%; left: 1%; margin: 0 auto;">
-      <form action="javascript:getUserGelo()">
+      <form action="javascript:startUI()">
         account<input id="account" type="text" />
-        <input type="button" value="json" onclick="javascript:getUserGelo()" /><br />
+        <input type="button" value="json" onclick="javascript:startUI()" /><br />
         <div id="map_canvas" style="width:100%; height:90%;"></div>
       </form>
     </div>

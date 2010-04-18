@@ -1,10 +1,10 @@
 import urllib2
 import logging
-api_host = 'twitter.com'
-def apicall(path, response_type, param):
-    ret = None
-    url = build_api_url(path, response_type, param)
 
+def apicall(host, path, response_type, param):
+    ret = None
+    url = build_api_url(host, path, response_type, param)
+    
     try:
         resp = urllib2.urlopen(url)
         ret = resp.read()
@@ -14,8 +14,8 @@ def apicall(path, response_type, param):
 
     return ret
 
-def build_api_url(path, response_type, param):
-    ret = ''.join(['http://', api_host + path, '.', response_type])
+def build_api_url(host, path, response_type, param):
+    ret = ''.join(['http://', host + path, '.', response_type])
     ret += param_to_str(param)
     return ret
     
