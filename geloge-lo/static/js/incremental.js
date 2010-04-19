@@ -29,11 +29,21 @@ function startUI(){
     $.blockUI({message: 'Loading Data for ' + account + '...'});
     var url = "/get_user_gelo.json?account=" + account;
     $.getJSON(url , "", function(result){
-                  var newest = result.shift();
+                  var ok = false;
                   buffer_backward.append(result);
-                  
-                  var geloelem = new GeloElementFromJSON(newest[0], newest[1], newest[2]);
-                  addGeloMarker(geloDataGroup, geloelem);
+                  while(!ok){
+                      var newest = buffer_backward.getNewest();
+                      if(newest == null){
+                          break;
+                      }
+
+                      var geloelem = new GeloElementFromJSON(newest[0], newest[1], newest[2]);
+                      addGeloMarker(geloDataGroup, geloelem);
+
+                      if(newest[2]){
+                          ok = true;
+                      }
+                  }
 
                   $.unblockUI();
               });
@@ -64,9 +74,9 @@ function event_down(){
         var geloelem = new GeloElementFromJSON(jsonElem[0], jsonElem[1], jsonElem[2]);
         addGeloMarker(geloDataGroup, geloelem);
         geloDataGroup.drawLine();
-        setPosition(geloDataGroup);
     }
     geloDataGroup.selectPrev();
+    setPosition(geloDataGroup);
 }
 
 $(document).keypress(function(event) {
