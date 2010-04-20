@@ -21,11 +21,24 @@ var GeloBuffer = function(){
 };
 
 
-var buffer_forward = new GeloBuffer();
-var buffer_backward = new GeloBuffer();
+var buffer_forward;
+var buffer_backward;
 
 function startUI(){
-    var account = $.query.get('account');
+    buffer_forward = new GeloBuffer();
+    buffer_backward = new GeloBuffer();
+
+
+    if(geloDataGroup){
+        geloDataGroup.removeAll();
+        $("#timeline").empty();
+    }
+
+    var account = $("#account").val();
+    if(!account){
+        return;
+    }
+
     $.blockUI({message: 'Loading Data for ' + account + '...'});
     var url = "/get_user_gelo.json?account=" + account;
     $.getJSON(url , "", function(result){
@@ -47,17 +60,6 @@ function startUI(){
 
                   $.unblockUI();
               });
-}
-
-function getUserGelo(url){
-    geloDataGroup.closeAllInfoWindow();
-    geloDataGroup.eraseLine();
-    geloDataGroup.removeAll();
-    $("#timeline").empty();
-    
-    var account = $("#account").val();
-    $.blockUI({message: "Loading Information for " + account});
-
 }
 
 function event_up(){

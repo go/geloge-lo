@@ -1,12 +1,16 @@
+var account;
 function getUserGelo(url){
-    geloDataGroup.closeAllInfoWindow();
-    geloDataGroup.eraseLine();
     geloDataGroup.removeAll();
     $("#timeline").empty();
     
     var account = $("#account").val();
     $.blockUI({message: "Loading Information for " + account});
     $.getJSON( url, "", buildGeroFromJSON);
+}
+
+function startByJSON(){
+    account = $("#account").val();    
+    getUserGelo("/get_user_gelo.json?account=" + account);
 }
 
 $(document).keypress(function(event) {
@@ -28,13 +32,9 @@ $(document).ready(function(){
                       if($.query.get('debug')){
                           debug_enable = true;
                       }
-                      
-                      var account = $.query.get('account');
+                      account = $.query.get('account');
                       if(account){
                           $("#account").val(account);    
-                          getUserGelo("/get_user_gelo.json?account=" + account);
+                          startByJSON();                          
                       }
-                      
-
-
                   });

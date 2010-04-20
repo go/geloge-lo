@@ -124,11 +124,14 @@ var GeloDataGroup = function(){
     };
 
     ret.removeAll = function(){
+        this.closeAllInfoWindow();
+        this.eraseLine();
         var removeAllMarkerFromMap = function(gd){
             gd.marker.setMap(null);
         };
         this.eachGeloData(removeAllMarkerFromMap);
         this.geloDataList = [];
+
     };
 
     ret.cssForAllHtmlElements = function(key, val){
@@ -144,6 +147,9 @@ var GeloDataGroup = function(){
             coordinates.push(this.geloDataList[i].marker.position);
         }
         
+        if(this.path){
+            this.path.setMap(null);
+        }
         this.path = new google.maps.Polyline({
                                                  path: coordinates, 
                                                  strokeColor: "#0000FF",
