@@ -13,6 +13,8 @@ handlers:
   script: geloauth/twitter.py
 - url: /oauth/twitter/callback
   script: geloauth/twitter.py
+- url: /oauth/twitter/logout
+  script: geloauth/twitter.py
 
 - url: /tool/adduser
   script: tool/adduser.py
