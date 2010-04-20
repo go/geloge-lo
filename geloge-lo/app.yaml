@@ -7,6 +7,13 @@ handlers:
 - url: /test
   script: test.py
 
+- url: /oauth
+  script: geloauth/twitter.py
+- url: /oauth/twitter/login
+  script: geloauth/twitter.py
+- url: /oauth/twitter/callback
+  script: geloauth/twitter.py
+
 - url: /tool/adduser
   script: tool/adduser.py
 - url: /tool/getuser
