@@ -6,6 +6,8 @@ api_version: 1
 handlers:
 - url: /test
   script: test.py
+- url: /authtest
+  script: authtest.py
 
 - url: /oauth
   script: geloauth/twitter.py
