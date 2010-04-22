@@ -19,15 +19,16 @@ def application ( environ, start_response ):
 
     user_info = show(account)
 
+    if not user_info:
+        return "User not found on twitter"
 
     user.uid = user_info['id']
     user.name = user_info['name']
     user.screen_name = user_info['screen_name']
-
+        
     user.put()
-    
-    return "OK"
 
+    return "OK"
 
 def main ():
   run_wsgi_app(application)
