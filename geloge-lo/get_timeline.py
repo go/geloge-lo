@@ -1,3 +1,7 @@
+import os
+import sys
+sys.path.append(os.path.dirname( os.path.realpath( __file__ )) + '/lib')
+
 from google.appengine.ext.webapp.util import run_wsgi_app
 from gelotter.statuses import user_timeline
 from google.appengine.ext import db
