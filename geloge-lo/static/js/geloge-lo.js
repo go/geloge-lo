@@ -315,7 +315,7 @@ function addGeloMarker(geloDataGroup, geloelem){
     tweet.innerHTML = 
         '<span>' + geloelem.text + '</span>' +
         '<br />' +
-        '</span><span style="font-size: 70%; margin-left: 50%;">' + geloelem.datestr() + '</span>';
+        '</span><span style="font-size: 70%; margin-left: 40%;">' + geloelem.datestr() + '</span>';
     if(marker){
         $(tweet).css('cursor', 'hand');
     }
