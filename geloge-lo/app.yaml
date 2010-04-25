@@ -8,6 +8,8 @@ handlers:
   script: test.py
 - url: /authtest
   script: authtest.py
+- url: /authcallbacktest
+  script: authcallbacktest.py
 
 - url: /oauth
   script: geloauth/twitter.py

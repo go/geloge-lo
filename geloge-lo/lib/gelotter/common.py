@@ -26,12 +26,3 @@ def param_to_str(param):
         ret_params.append('='.join([key, param[key]]))
     return '?' + '&'.join(ret_params)
 
-
-
-
-
-
-
-
-
-
