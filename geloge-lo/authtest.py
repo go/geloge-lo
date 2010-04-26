@@ -12,8 +12,8 @@ import gelotter.oauth
 
 def application ( environ, start_response ):
     authz_uri = 'http://twitter.com/oauth/authorize'
-    consumer_key = 'NB8p5RcwbfxqoroV22aNKg'
-    consumer_secret = 'b9MgdPxkS4lbbNzyrOTId3P36UTwnwed7KXNiI0E0I'
+    consumer_key = '__CONSUMER_KEY__'
+    consumer_secret = '__CONSUMER_SECRET__'
     session = None
 
     cookie = Cookie.SimpleCookie()
