@@ -6,7 +6,6 @@ def getGeloSession(id = None):
     if id:
         query = GeloSession.gql("WHERE id = :sid ", sid=id)
         if query.count() > 0:
-            query[0].username = 'aa'
             query[0].put()
             return query[0]
 
@@ -26,6 +25,3 @@ class GeloSession(db.Model):
     time_created = db.DateTimeProperty()
     time_updated = db.DateTimeProperty()
     token_key = db.ReferenceProperty()
-
-            
-        
