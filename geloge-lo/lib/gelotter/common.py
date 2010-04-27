@@ -1,9 +1,15 @@
+from google.appengine.api import urlfetch
 import urllib2
 import logging
 from urllib import quote, urlencode
 from hmac import new as hmac
 from hashlib import sha1
 from urllib import urlopen
+from time import time
+from random import getrandbits
+
+consumer_key = '__CONSUMER_KEY__'
+consumer_secret = '__CONSUMER_SECRET__'
 
 def apicall(host, path, response_type, param):
     ret = None
@@ -15,6 +21,10 @@ def apicall(host, path, response_type, param):
     except (urllib2.HTTPError, urllib2.URLError), error:
         logging.info( str(type(error)) + "error at " + url)
         logging.info(error)
+    except urlfetch.DownloadError, error: 
+        logging.info( str(type(error)) + "error at " + url)
+        logging.info(error)
+        pass
 
     return ret
 
@@ -42,14 +52,45 @@ def get_sign(method, url, params, key):
                 message, 
                 sha1
                 ).digest().encode('base64')[:-1]
-    
-def api_get(url, params, key):
+
+def get_oauth_params(params = { }, oauth_token = None):
+    ret = {
+        'oauth_consumer_key' : consumer_key, 
+        'oauth_signature_method' : 'HMAC-SHA1', 
+        'oauth_timestamp' : str(int(time())), 
+        'oauth_nonce' : str(getrandbits(64)), 
+        'oauth_version' : '1.0'
+        }
+    for k in params.keys():
+        ret[k] = params[k]
+
+    if oauth_token:
+        ret['oauth_token'] = oauth_token
+
+    return ret
+def api_get(url, params, token_secret = None):
+    key = consumer_secret + '&'
+    if token_secret:
+        key += token_secret
+
     params['oauth_signature'] = get_sign('GET', url, params, key)
     request_url = url + '?' + urlencode(params)
-    return urlopen(request_url).read()
+    try:
+        return urlopen(request_url).read()
+    except urlfetch.DownloadError, e: 
+        return None
         
-def api_post(url, params, key):
+        
+def api_post(url, params, token_secret = None):
+    key = consumer_secret + '&'
+    if token_secret:
+        key += token_secret
+
     params['oauth_signature'] = get_sign('POST', url, params, key)
     request_url = url
-    return urlopen(request_url, urlencode(params)).read()
+    try:
+        return urlopen(request_url, urlencode(params)).read()
+    except urlfetch.DownloadError, e: 
+        return None
+
     

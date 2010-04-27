@@ -7,9 +7,9 @@ for KEY in `cat $CONF|awk '{print $1}'`; do
   VAL=`fgrep $KEY $CONF | awk '{print $2}'`
   if [ -z $1 ]; then
     echo "convert $KEY to $VAL"
-    sed -iold -e "s/$KEY/$VAL/g" $BASEDIR/authtest.py $BASEDIR/authcallbacktest.py 
+    sed -iold -e "s/$KEY/$VAL/g" $BASEDIR/lib/gelotter/common.py
   else
     echo "revert $VAL to $KEY"
-    sed -iold -e "s/$VAL/$KEY/g" $BASEDIR/authtest.py $BASEDIR/authcallbacktest.py 
+    sed -iold -e "s/$VAL/$KEY/g" $BASEDIR/lib/gelotter/common.py
   fi
 done

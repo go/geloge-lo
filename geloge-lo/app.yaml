@@ -6,10 +6,10 @@ api_version: 1
 handlers:
 - url: /test
   script: test.py
-- url: /authtest
-  script: authtest.py
-- url: /authcallbacktest
-  script: authcallbacktest.py
+- url: /login
+  script: login.py
+- url: /logincb
+  script: logincb.py
 
 - url: /oauth
   script: geloauth/twitter.py

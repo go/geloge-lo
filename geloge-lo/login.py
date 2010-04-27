@@ -11,9 +11,6 @@ import gelotter.account
 import gelotter.oauth
 
 def application ( environ, start_response ):
-    authz_uri = 'http://twitter.com/oauth/authorize'
-    consumer_key = '__CONSUMER_KEY__'
-    consumer_secret = '__CONSUMER_SECRET__'
     session = None
 
     cookie = Cookie.SimpleCookie()
@@ -26,7 +23,7 @@ def application ( environ, start_response ):
         session.put()
     else:
         session = getGeloSession()
-        req_token = gelotter.oauth.request_token(consumer_key, consumer_secret)
+        req_token = gelotter.oauth.request_token()
         if not req_token:
             start_response('503 Service Unavailable', 
                            [('Content-Type',  'text/plain')])
@@ -40,7 +37,7 @@ def application ( environ, start_response ):
         start_response('302 Found', 
                        [('Content-Type',  'text/plain'), 
                         ('Set-Cookie',  'sid=' + session.id), 
-                        ('Location', authz_uri + 
+                        ('Location', gelotter.oauth.authz_uri + 
                          '?oauth_token=' + 
                          req_token.oauth_token)])
         return 'please authorize me!'
@@ -55,14 +52,14 @@ def application ( environ, start_response ):
     acc_token = session.token_key
     print acc_token
     if acc_token:
-        contents.append(acc_token.screen_name)
+        if acc_token.screen_name:
+            contents.append(acc_token.screen_name)
+
     contents.append(str(session.time_created))
     contents.append(str(session.time_updated))
 
     print gelotter.account.rate_limit_status()
-    print gelotter.account.rate_limit_status2(consumer_key, 
-                                              consumer_secret, 
-                                              acc_token.oauth_token, 
+    print gelotter.account.rate_limit_status2(acc_token.oauth_token, 
                                               acc_token.oauth_token_secret)
     
     return "\n".join(contents)

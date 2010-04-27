@@ -1,10 +1,10 @@
-from time import time
-from random import getrandbits
 from cgi import parse_qs
 from datetime import datetime
 
 from google.appengine.ext import db
-from gelotter.common import api_get, api_post
+from gelotter.common import api_get, api_post, get_oauth_params
+
+authz_uri = 'http://twitter.com/oauth/authorize'
 
 class Token(db.Model):
     oauth_token = db.StringProperty(required=True)
@@ -13,16 +13,13 @@ class Token(db.Model):
     screen_name = db.StringProperty()
     user_id = db.StringProperty()
 
-def request_token(oauth_consumer_key, oauth_consumer_secret):
+def request_token():
     uri = 'http://twitter.com/oauth/request_token'
-    params = { 
-        'oauth_consumer_key' : oauth_consumer_key, 
-        'oauth_signature_method' : 'HMAC-SHA1', 
-        'oauth_timestamp' : str(int(time())), 
-        'oauth_nonce' : str(getrandbits(64)), 
-        'oauth_version' : '1.0'
-        }
-    res = api_get(uri, params, oauth_consumer_secret + '&')
+    params = get_oauth_params()
+    res = api_get(uri, params)
+    if not res:
+        return None
+
     res_param = parse_qs(res)
 
     if not res_param.has_key('oauth_token'):
@@ -36,18 +33,15 @@ def request_token(oauth_consumer_key, oauth_consumer_secret):
         time_created = datetime.now()
         )
 
-def authorize(oauth_token, oauth_consumer_key, oauth_consumer_secret):
+def authorize(oauth_token):
     uri = 'http://twitter.com/oauth/access_token'
-    params = { 
-        'oauth_token' : oauth_token, 
-        'oauth_consumer_key' : oauth_consumer_key, 
-        'oauth_signature_method' : 'HMAC-SHA1', 
-        'oauth_timestamp' : str(int(time())), 
-        'oauth_nonce' : str(getrandbits(64)), 
-        'oauth_version' : '1.0'
-        }
-    res = api_post(uri, params, oauth_consumer_secret + '&')
+    params = get_oauth_params(oauth_token = oauth_token)
+    res = api_post(uri, params)
+    if not res:
+        return None
+
     res_param = parse_qs(res)
+
     if not res_param.has_key('oauth_token'):
         return None
     if not res_param.has_key('oauth_token_secret'):

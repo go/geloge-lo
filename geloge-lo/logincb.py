@@ -9,9 +9,6 @@ from gelosession import getGeloSession
 import gelotter.oauth
 
 def application ( environ, start_response ):
-    consumer_key = '__CONSUMER_KEY__'
-    consumer_secret = '__CONSUMER_SECRET__'
-
     session = None
     cookie = Cookie.SimpleCookie()
     if environ.has_key('HTTP_COOKIE'):
@@ -26,16 +23,15 @@ def application ( environ, start_response ):
         start_response('400 Bad Request', [('Content-Type',  'text/plain')])
         return 'oauth_token not found'
 
-    acc_token = gelotter.oauth.authorize(param['oauth_token'][0], 
-                                         consumer_key,
-                                         consumer_secret)
+    acc_token = gelotter.oauth.authorize(param['oauth_token'][0])
     if(acc_token):
         token_key = acc_token.put()
         session.token_key.delete()
         session.token_key = token_key
         session.put()
 
-    start_response('200 OK', [('Content-Type',  'text/plain')])
+    start_response('302 Found', [('Content-Type',  'text/plain'), 
+                                 ('Location', 'http://geloge-lo.appspot.com/login')])
     print acc_token
     return "OK"
 
