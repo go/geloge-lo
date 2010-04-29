@@ -10,7 +10,9 @@ import gelotter.oauth
 
 def application ( environ, start_response ):
     session = None
+    return_to = None
     cookie = Cookie.SimpleCookie()
+    
     if environ.has_key('HTTP_COOKIE'):
         cookie.load(environ["HTTP_COOKIE"])
 
@@ -28,12 +30,17 @@ def application ( environ, start_response ):
         token_key = acc_token.put()
         session.token_key.delete()
         session.token_key = token_key
+        return_to = session.return_to
+        session.return_to = ''
         session.put()
 
-    start_response('302 Found', [('Content-Type',  'text/plain'), 
-                                 ('Location', 'http://geloge-lo.appspot.com/login')])
-    print acc_token
-    return "OK"
+    if return_to:
+        start_response('302 Found', [('Content-Type',  'text/plain'), 
+                                     ('Location', return_to)])
+        return "OK"
+    else:
+        start_response('200 OK', [('Content-Type',  'text/plain')])
+        return "OK"
 
 def main ():
   run_wsgi_app(application)

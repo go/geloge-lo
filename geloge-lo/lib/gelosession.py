@@ -25,3 +25,4 @@ class GeloSession(db.Model):
     time_created = db.DateTimeProperty()
     time_updated = db.DateTimeProperty()
     token_key = db.ReferenceProperty()
+    return_to = db.StringProperty()

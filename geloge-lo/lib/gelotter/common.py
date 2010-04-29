@@ -8,8 +8,8 @@ from urllib import urlopen
 from time import time
 from random import getrandbits
 
-consumer_key = '__CONSUMER_KEY__'
-consumer_secret = '__CONSUMER_SECRET__'
+consumer_key = 'CQiHbpjvmfsla8KqGHwqw'
+consumer_secret = 'ZW8Ctox0sIINW0x9h2AOV0TEVHzH41rKDmxZ0ohlXw'
 
 def apicall(host, path, response_type, param):
     ret = None
@@ -68,6 +68,7 @@ def get_oauth_params(params = { }, oauth_token = None):
         ret['oauth_token'] = oauth_token
 
     return ret
+
 def api_get(url, params, token_secret = None):
     key = consumer_secret + '&'
     if token_secret:
@@ -80,7 +81,6 @@ def api_get(url, params, token_secret = None):
     except urlfetch.DownloadError, e: 
         return None
         
-        
 def api_post(url, params, token_secret = None):
     key = consumer_secret + '&'
     if token_secret:
@@ -92,5 +92,3 @@ def api_post(url, params, token_secret = None):
         return urlopen(request_url, urlencode(params)).read()
     except urlfetch.DownloadError, e: 
         return None
-
-    

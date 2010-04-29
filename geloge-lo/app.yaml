@@ -6,6 +6,8 @@ api_version: 1
 handlers:
 - url: /test
   script: test.py
+- url: /incremental
+  script: incremental.py
 - url: /login
   script: login.py
 - url: /logincb
@@ -30,6 +32,9 @@ handlers:
   script: tool/gettweet.py
 - url: /tool/deltweet
   script: tool/deltweet.py
+
+- url: /api/get_timeline
+  script: api/get_timeline.py
 
 - url: /internal/add_user_to_queue
   script: internal/add_user_to_queue.py
