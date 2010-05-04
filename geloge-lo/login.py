@@ -4,7 +4,7 @@ import cgi
 sys.path.append(os.path.dirname( os.path.realpath( __file__ )) + '/lib')
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-from gelosession import getGeloSession
+from gelosession import createGeloSession, getAuthorizedGeloSession
 
 import Cookie
 from datetime import datetime
@@ -12,7 +12,7 @@ import gelotter.account
 import gelotter.oauth
 
 def do_auth(return_to, start_response):
-    session = getGeloSession()
+    session = createGeloSession()
     req_token = gelotter.oauth.request_token()
     if not req_token:
         start_response('503 Service Unavailable', 
@@ -50,14 +50,11 @@ def application ( environ, start_response ):
     if not cookie.has_key('sid'):
         return do_auth(return_to, start_response)
 
-    session = getGeloSession(cookie['sid'].value)
-    session.time_updated = datetime.now()
-    session.put()
-
-    if not session.token_key:
-        return do_auth(return_to, start_response)
-
-    if not session.token_key.screen_name:
+    session = getAuthorizedGeloSession(cookie['sid'].value)
+    if session:
+        session.time_updated = datetime.now()
+        session.put()
+    else:
         return do_auth(return_to, start_response)
     
     start_response('200 OK', [
