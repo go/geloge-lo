@@ -46,7 +46,6 @@ def get_sign(method, url, params, key):
           '&'.join('%s=%s' % (quote(k, ''), 
                               quote(params[k], '')) for k in sorted(params))]
     ar = map((lambda x: quote(x, '')), ar)
-    
     message = '&'.join(ar)
     return hmac(key, 
                 message, 
@@ -91,4 +90,8 @@ def api_post(url, params, token_secret = None):
     try:
         return urlopen(request_url, urlencode(params)).read()
     except urlfetch.DownloadError, e: 
+        return None
+    except (urllib2.HTTPError, urllib2.URLError), e:
+        return None
+    except (EOFError), e:
         return None

@@ -8,6 +8,8 @@ handlers:
   script: test.py
 - url: /incremental
   script: incremental.py
+- url: /update
+  script: update.py
 - url: /login
   script: login.py
 - url: /logincb
@@ -33,6 +35,8 @@ handlers:
 - url: /tool/deltweet
   script: tool/deltweet.py
 
+- url: /api/update
+  script: api/update.py
 - url: /api/get_timeline
   script: api/get_timeline.py
 
