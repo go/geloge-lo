@@ -13,11 +13,14 @@
 </head>
 
 <body onload="initialize()">
+  <div class="topmenu">
+    <img class="logo" src="/static/img/geloge-lo.png" />
+  </div>
   <div style="margin: 0 auto; text-align: left;">
     <div class="viewer">
       <form action="javascript:startUI()">
         <input type="hidden" id="account" type="text" value="{{ screen_name }}"/>
-        <input type="button" value="json" onclick="javascript:startUI()" /><br />
+        <!-- <input type="button" value="json" onclick="javascript:startUI()" /><br /> -->
         <div id="map_canvas"></div>
       </form>
     </div>
@@ -26,6 +29,7 @@
       <input type="button" value="Prev" onclick="javascript:event_down()">
     </div>
     <div class="tweets">
+      <div class="top_space"></div>
       <div id="debug"></div>
       <div id="timeline"></div>
     </div>

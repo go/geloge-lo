@@ -121,10 +121,10 @@ $(document).ready(function(){
                           debug_enable = true;
                       }
                       
-                      var account = $.query.get('account');
-                      if(account){
-                          $("#account").val(account);    
-                          startUI();
-                      }
+                      //var account = $.query.get('account');
+                      //if(account){
+                      //$("#account").val(account);    
+                      startUI();
+                      //}
                       
                   });
