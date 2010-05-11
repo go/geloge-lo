@@ -46,7 +46,7 @@ var GeloData = function(marker,  htmlElement){
             marker.infoWindow.open(map, marker);
             $(this.htmlElement).css('color', tweet_color_selected);
         }
-        var top = $(this.htmlElement).offset().top;
+        var top = $(this.htmlElement).offset().top - 50;
         if(animation){
             $('html,body').animate({ scrollTop: top }, 'slow');            
         }else{
@@ -267,7 +267,7 @@ function setPosition(geloDataList){
 
 function initialize() {
     var myOptions = {
-        zoom: 1,
+        zoom: 2,
         center: new google.maps.LatLng(0, 0), 
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -293,6 +293,7 @@ function createMarker(gelodata){
 
 function addGeloMarker(geloDataGroup, geloelem){
     var tweet = document.createElement("div");
+    $(tweet).addClass('tweet');
     $(tweet).css('color', tweet_color);
     var marker = null;
     if(geloelem.gelo){ // if geolocation foun
@@ -320,7 +321,7 @@ function addGeloMarker(geloDataGroup, geloelem){
         $(tweet).css('cursor', 'hand');
     }
     $("#timeline").append($(tweet));
-    $("#timeline").append($(document.createElement('hr')));
+    //$("#timeline").append($(document.createElement('hr')));
 }
 
 function buildGeroFromJSON(result){

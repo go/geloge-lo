@@ -6,8 +6,14 @@ api_version: 1
 handlers:
 - url: /test
   script: test.py
-- url: /authtest
-  script: authtest.py
+- url: /incremental
+  script: incremental.py
+- url: /update
+  script: update.py
+- url: /login
+  script: login.py
+- url: /logincb
+  script: logincb.py
 
 - url: /oauth
   script: geloauth/twitter.py
@@ -28,6 +34,11 @@ handlers:
   script: tool/gettweet.py
 - url: /tool/deltweet
   script: tool/deltweet.py
+
+- url: /api/update
+  script: api/update.py
+- url: /api/get_timeline
+  script: api/get_timeline.py
 
 - url: /internal/add_user_to_queue
   script: internal/add_user_to_queue.py

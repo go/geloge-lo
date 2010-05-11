@@ -1,4 +1,3 @@
-import google.appengine.api.memcache
 from google.appengine.ext import db
 from datetime import datetime
 import uuid
@@ -24,9 +23,9 @@ def getGeloSession(id = None):
 
 class GeloSession(db.Model):
     id = db.StringProperty(required=True)
-    username = db.StringProperty()
     time_created = db.DateTimeProperty()
     time_updated = db.DateTimeProperty()
+    token_key = db.ReferenceProperty()
 
             
         

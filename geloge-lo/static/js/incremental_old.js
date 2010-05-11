@@ -40,8 +40,7 @@ function startUI(){
     }
 
     $.blockUI({message: 'Loading Data for ' + account + '...'});
-    //var url = "/get_user_gelo.json?account=" + account;
-    var url = "/api/get_timeline";
+    var url = "/get_user_gelo.json?account=" + account;
     $.getJSON(url , "", function(result){
                   var ok = false;
                   buffer_backward.append(result);
@@ -121,10 +120,10 @@ $(document).ready(function(){
                           debug_enable = true;
                       }
                       
-                      //var account = $.query.get('account');
-                      //if(account){
-                      //$("#account").val(account);    
-                      startUI();
-                      //}
+                      var account = $.query.get('account');
+                      if(account){
+                          $("#account").val(account);    
+                          startUI();
+                      }
                       
                   });
