@@ -5,6 +5,7 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 import cgi
 import Cookie
+from urllib import quote
 from datetime import datetime
 from gelosession import GeloSession, getGeloSession
 from gelotter.search import search
@@ -22,17 +23,9 @@ def application ( environ, start_response ):
     if environ.has_key('HTTP_COOKIE'):
         cookie.load(environ["HTTP_COOKIE"])
 
-#    if not cookie.has_key('sid'):
-#        return 'session not found'
-
     if form.has_key('hashname'):
-        hashname = "%23"+form['hashname'].value
+        hashname = quote(form['hashname'].value)
     
-#    hashname="jawsug"
-#    session = getGeloSession(cookie['sid'].value)
-#    session.time_updated = datetime.now()
-#    session.put()
-
     start_response('200 OK', [('Content-Type', 'text/plain')])
     tweets = search(hashname)['results']
 

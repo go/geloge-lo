@@ -41,7 +41,7 @@ function startUI(){
 
     $.blockUI({message: 'Loading Data for ' + account + '...'});
     // var url = "/get_user_gelo.json?account=" + account;
-    var url = "/api/get_hashtag?hashname=" + account;
+    var url = "/api/get_hashtag?hashname=" + escape(account);
     $.getJSON(url , "", function(result){
                   var ok = false;
                   buffer_backward.append(result);
