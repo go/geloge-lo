@@ -2,7 +2,7 @@
 import sys, time
 import urllib
 import urllib2
-import simplejson
+import json
 import re
 from datetime import datetime
 from datetime import timedelta
@@ -23,7 +23,7 @@ class pytwit:
       }
       query = urllib.urlencode(query)
       resdata = urllib2.urlopen(url + "?" + query).read()
-      jdata = simplejson.loads(resdata)
+      jdata = json.loads(resdata)
       result = result + jdata["results"]
   
     return result
@@ -99,7 +99,6 @@ if __name__ == "__main__":
   size = 1500
 
   path = "/home/go/public_html/maps/"
-  '''
   today = {
     'year':datetime.today().strftime("%Y"),
     'month':datetime.today().strftime("%m"),
@@ -111,8 +110,8 @@ if __name__ == "__main__":
     'month':'04',
     'day':'09'
   }
+  '''
   filename = path+today['year']+today['month']+today['day']+".kml"
-  filename = "tmp.kml"
 
   pytwit = pytwit()
   result = pytwit.search(keyword, lang, size, today)

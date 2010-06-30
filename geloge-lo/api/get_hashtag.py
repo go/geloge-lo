@@ -28,13 +28,11 @@ def application ( environ, start_response ):
     if form.has_key('hashname'):
         hashname = "%23"+form['hashname'].value
     
-#    hashname="jawsug"
 #    session = getGeloSession(cookie['sid'].value)
 #    session.time_updated = datetime.now()
 #    session.put()
 
     start_response('200 OK', [('Content-Type', 'text/plain')])
-#    tweets = hash_timeline(hashname['hashname'][0])['results']
     tweets = hash_timeline(hashname)['results']
 
     ret = []
