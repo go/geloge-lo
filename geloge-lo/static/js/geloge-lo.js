@@ -29,6 +29,7 @@ var GeloElementFromJSON = function(datestr, text, gelo){
 
     ret.text = text;
     ret.gelo = gelo;
+
     ret.datestr = function(){
         return this.date.toString();  
     };
@@ -276,8 +277,8 @@ function initialize() {
 
 function createMarker(gelodata){
     var marker = new google.maps.Marker({
-                                            position: new google.maps.LatLng(gelodata.gelo[1], 
-                                                                             gelodata.gelo[0]), 
+                                            position: new google.maps.LatLng(gelodata.gelo[0], 
+                                                                             gelodata.gelo[1]), 
                                             map: map, 
                                             title: 'Geloge-Lo'
                                         });
