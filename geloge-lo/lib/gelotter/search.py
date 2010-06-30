@@ -1,41 +1,38 @@
 import gelotter.common
-from gelotter.common import api_get, api_post
 from django.utils import simplejson as json
-from gelotter.oauth import get_oauth_params
 
 api_host = 'search.twitter.com'
 
-def hash_timeline(hashname):
+def search(query, 
+           lang = None, 
+           rpp = None, 
+           page = None, 
+           since_id = None, 
+           geocode = None, 
+           since = None, 
+           max_id = None
+           ):
     # TODO json to constant
-    param = {'q' : hashname}
-#    if since_id:
-#        param['since_id'] = since_id
+    param = {'q' : query}
 
+    if lang:
+        param['lang'] = lang
+    if rpp:
+        param['rpp'] = rpp
+    if page:
+        param['page'] = page
+    if since_id:
+        param['since_id'] = since_id
+    if geocode:
+        param['geocode'] = geocode
+    if since:
+        param['since'] = since
+    if max_id:
+        param['max_id'] = max_id
+    
     body = gelotter.common.apicall(api_host, '/search', 'json' , param)
+
     data = None
     if body:
         data = json.loads(body)
     return data
-
-def update(status,
-           lat = None, 
-           lng = None, 
-           display_coordinates = 'false',  
-           oauth_token = None, 
-           oauth_token_secret = None):
-    params = get_oauth_params(oauth_token = oauth_token)
-    params['status']  = status
-
-    if lat:
-        params['lat'] = lat
-    if lng:
-        params['long'] = lng
-
-    url = 'http://api.twitter.com/1/statuses/update.json'
-    result = api_post(url, params, oauth_token_secret)
-    if not result:
-        return None
-
-    ret = json.loads(result)
-    return ret
-    

@@ -7,7 +7,7 @@ import cgi
 import Cookie
 from datetime import datetime
 from gelosession import GeloSession, getGeloSession
-from gelotter.search import hash_timeline
+from gelotter.search import search
 from gelotter.oauth import Token
 from django.utils import simplejson as json
 
@@ -34,8 +34,7 @@ def application ( environ, start_response ):
 #    session.put()
 
     start_response('200 OK', [('Content-Type', 'text/plain')])
-#    tweets = hash_timeline(hashname['hashname'][0])['results']
-    tweets = hash_timeline(hashname)['results']
+    tweets = search(hashname)['results']
 
     ret = []
     for t in tweets:
