@@ -41,7 +41,7 @@ function startUI(){
 
     $.blockUI({message: 'Loading Data for ' + account + '...'});
     // var url = "/get_user_gelo.json?account=" + account;
-    var url = "/api/get_hashtag?hashname=" + account;
+    var url = "/api/get_hashtag?hashname=" + escape(account);
     $.getJSON(url , "", function(result){
                   var ok = false;
                   buffer_backward.append(result);
@@ -92,10 +92,10 @@ function event_down(){
 
 function focus_near_by(index){
     if(index == 0){ 
-        var focusDataList = geloDataGroup.getSlicedGeloList(0, index+2)
+        var focusDataList = geloDataGroup.getSlicedGeloList(0, index+2);
     }
     else{
-        var focusDataList = geloDataGroup.getSlicedGeloList(index-1, index+2)
+        var focusDataList = geloDataGroup.getSlicedGeloList(index-1, index+2);
     }
 
     setPosition(focusDataList);

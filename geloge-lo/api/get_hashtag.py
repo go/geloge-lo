@@ -5,9 +5,10 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 
 import cgi
 import Cookie
+from urllib import quote
 from datetime import datetime
 from gelosession import GeloSession, getGeloSession
-from gelotter.search import hash_timeline
+from gelotter.search import search
 from gelotter.oauth import Token
 from django.utils import simplejson as json
 
@@ -22,18 +23,11 @@ def application ( environ, start_response ):
     if environ.has_key('HTTP_COOKIE'):
         cookie.load(environ["HTTP_COOKIE"])
 
-#    if not cookie.has_key('sid'):
-#        return 'session not found'
-
     if form.has_key('hashname'):
-        hashname = "%23"+form['hashname'].value
+        hashname = quote(form['hashname'].value)
     
-#    session = getGeloSession(cookie['sid'].value)
-#    session.time_updated = datetime.now()
-#    session.put()
-
     start_response('200 OK', [('Content-Type', 'text/plain')])
-    tweets = hash_timeline(hashname)['results']
+    tweets = search(hashname)['results']
 
     ret = []
     for t in tweets:
