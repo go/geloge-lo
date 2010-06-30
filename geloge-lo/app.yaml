@@ -1,4 +1,4 @@
-application: geloge-lo
+application: geloge-lo-exp
 version: 1
 runtime: python
 api_version: 1
@@ -39,6 +39,8 @@ handlers:
   script: api/update.py
 - url: /api/get_timeline
   script: api/get_timeline.py
+- url: /api/get_hashtag
+  script: api/get_hashtag.py
 
 - url: /internal/add_user_to_queue
   script: internal/add_user_to_queue.py
