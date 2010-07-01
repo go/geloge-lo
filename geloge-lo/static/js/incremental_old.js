@@ -34,14 +34,14 @@ function startUI(){
         $("#timeline").empty();
     }
 
-    var account = $("#account").val();
-    if(!account){
+    var query = $("#query").val();
+    if(!query){
         return;
     }
 
-    $.blockUI({message: 'Loading Data for ' + account + '...'});
-    // var url = "/get_user_gelo.json?account=" + account;
-    var url = "/api/get_hashtag?hashname=" + escape(account);
+    $.blockUI({message: 'Loading Data for ' + query + '...'});
+    // var url = "/get_user_gelo.json?query=" + query;
+    var url = "/api/get_hashtag?hashname=" + escape(query);
     $.getJSON(url , "", function(result){
                   var ok = false;
                   buffer_backward.append(result);
@@ -102,6 +102,10 @@ function focus_near_by(index){
 }
 
 $(document).keypress(function(event) {
+                         if($(event.target).attr("id") == "query"){
+                             return;
+                         }
+
                          var up_key = 107; // k
                          var down_key = 106; //j
                          var pressed_key = event.which;
@@ -113,6 +117,7 @@ $(document).keypress(function(event) {
                              debug("down");
                              event_down();
                          }
+                         
                      });
 
 $(document).ready(function(){
@@ -121,9 +126,9 @@ $(document).ready(function(){
                           debug_enable = true;
                       }
                       
-                      var account = $.query.get('account');
-                      if(account){
-                          $("#account").val(account);    
+                      var query = $.query.get('query');
+                      if(query){
+                          $("#query").val(query);    
                           startUI();
                       }
                       
