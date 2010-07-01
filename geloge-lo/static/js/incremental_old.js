@@ -82,7 +82,7 @@ function event_down(){
         var jsonElem = buffer_backward.getNewest();
         var geloelem = new GeloElementFromJSON(jsonElem[0], jsonElem[1], jsonElem[2]);
         addGeloMarker(geloDataGroup, geloelem);
-        geloDataGroup.drawLine();
+        // geloDataGroup.drawLine();
     }
     geloDataGroup.selectPrev();
     index = geloDataGroup.getCurrentSelectedIndex();

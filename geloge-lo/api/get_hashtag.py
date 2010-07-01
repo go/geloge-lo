@@ -27,21 +27,22 @@ def application ( environ, start_response ):
         hashname = quote(form['hashname'].value)
     
     start_response('200 OK', [('Content-Type', 'text/plain')])
-    tweets = search(hashname)['results']
-
     ret = []
-    for t in tweets:
-        lat = None
-        lng = None
-        if t['geo']:
-            lat = float(t['geo']['coordinates'][0])
-            lng = float(t['geo']['coordinates'][1])
-        elem = []
-        elem.append(str(datetime.strptime(t['created_at'], "%a, %d %b %Y %H:%M:%S +0000")))
-        elem.append(t['text'])
-        if lat and lng:
-            elem.append([lat, lng])
-        ret.append(elem)
+    for page in range(1,16):
+      tweets = search(hashname, rpp="100", page=str(page))['results']
+
+      for t in tweets:
+          lat = None
+          lng = None
+          if t['geo']:
+              lat = float(t['geo']['coordinates'][0])
+              lng = float(t['geo']['coordinates'][1])
+          elem = []
+          elem.append(str(datetime.strptime(t['created_at'], "%a, %d %b %Y %H:%M:%S +0000")))
+          elem.append(t['text'])
+          if lat and lng:
+              elem.append([lat, lng])
+          ret.append(elem)
 
     return json.dumps(ret)
 
