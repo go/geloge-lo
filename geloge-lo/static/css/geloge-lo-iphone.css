@@ -2,9 +2,35 @@
   width: 98%;
   height: 95%;
   position: relative;
-  top: 1%;
+  top: 50px;
   left: 1%;
   margin: 0 auto;
+}
+
+.topmenu{ 
+    padding: 2px;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 50px;
+    width: 100%;
+    background-color: #99B3CC;
+}
+
+.logo{ 
+    height: 50px;
+}
+
+#timeline{ 
+    background-color: #fff;
+}
+
+.tweet{ 
+    margin: 10px;
+    padding: 10px;
+    background-color: #FFF;
+    border-style: solid;
+    border-width: 0px 0px 1px 0px;
 }
 
 #map_canvas{
@@ -17,7 +43,7 @@
   position: fixed;
   top: 0px;
   right: 0px;
-  margin-top: 320px;
+  margin-top: 370px;
 }
 
 .tweets{
@@ -29,3 +55,10 @@
   margin-top: 15px;
 }
 
+.top_space{ 
+    height: 50px;
+}
+
+.bottom_space{ 
+    height: 100%;
+}

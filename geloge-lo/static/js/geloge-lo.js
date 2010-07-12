@@ -15,7 +15,7 @@ function stringToDate(datestr){
     var time = datetime[1].split(':');
     debug(time);
     return new Date(parseInt(date[0]),
-                    parseInt(date[1]),
+                    parseInt(date[1]-1),
                     parseInt(date[2]), 
                     parseInt(time[0]),
                     parseInt(time[1]),
