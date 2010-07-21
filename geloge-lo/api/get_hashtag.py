@@ -10,6 +10,7 @@ from datetime import datetime
 from gelosession import GeloSession, getGeloSession
 from gelotter.search import search
 from gelotter.oauth import Token
+from gelopics.twitpic import genthumbs
 from django.utils import simplejson as json
 
 def application ( environ, start_response ):
@@ -25,7 +26,7 @@ def application ( environ, start_response ):
 
     if form.has_key('hashname'):
         hashname = quote(form['hashname'].value)
-    
+
     start_response('200 OK', [('Content-Type', 'text/plain')])
     ret = []
     for page in range(1,16):
@@ -39,6 +40,7 @@ def application ( environ, start_response ):
               lng = float(t['geo']['coordinates'][1])
           elem = []
           elem.append(str(datetime.strptime(t['created_at'], "%a, %d %b %Y %H:%M:%S +0000")))
+          t['text'] = genthumbs(t['text'])
           elem.append(t['text'])
           if lat and lng:
               elem.append([lat, lng])
