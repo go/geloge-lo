@@ -35,9 +35,8 @@ def build_api_url(host, path, response_type, param):
     
     
 def param_to_str(param):
-    ret_params = []
-    for key in param:
-        ret_params.append('='.join([key, param[key]]))
+    ret_params = ['='.join([key, param[key]]) for key in param]
+
     return '?' + '&'.join(ret_params)
 
 def get_sign(method, url, params, key):

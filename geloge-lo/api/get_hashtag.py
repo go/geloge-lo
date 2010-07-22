@@ -29,8 +29,10 @@ def application ( environ, start_response ):
 
     start_response('200 OK', [('Content-Type', 'text/plain')])
     ret = []
-    for page in range(1,16):
+    for page in xrange(1,16):
       tweets = search(hashname, rpp="100", page=str(page))['results']
+      if not tweets:
+        break
 
       for t in tweets:
           lat = None
