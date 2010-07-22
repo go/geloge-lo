@@ -34,6 +34,9 @@ handlers:
   script: tool/gettweet.py
 - url: /tool/deltweet
   script: tool/deltweet.py
+- url: /tool/rate_limit_status
+  script: tool/rate_limit_status.py
+
 
 - url: /api/update
   script: api/update.py
