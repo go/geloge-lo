@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 import re
 
-api_host = "http://twitpic.com"
+api_hosts = ["http://twitpic.com", "http://yfrog.com"]
 def genthumbs(text):
-  q = re.compile(api_host)
+  q = [re.compile(url) for url in api_hosts]
 
-  if q.search(text):
-    text = text.replace(api_host, '<br><img src="http://twitpic.com/show/thumb')
+  if q[0].search(text):
+    text = text.replace(api_hosts[0], '<br><img src="http://twitpic.com/show/thumb')
     text += '">'
+  elif q[1].search(text):
+    text = text.replace(api_hosts[1], '<br><img src="http://yfrog.com')
+    text += '.th.jpg">'
 
   return text
