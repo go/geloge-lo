@@ -1,0 +1,4 @@
+#!/bin/bash
+GELOGE_LO_CRAWL=../../geloge-lo-crawl
+exec 2>&1
+exec $GELOGE_LO_CRAWL

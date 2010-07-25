@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+import sys
+import os
+import threading
+import pprint
+from oauth import OAuthClient, OAuthConfig
+from user_stream import UserStream, Tweet, Friends, DictWrapper
+from data_queue import GeloDataQueue
+consumer_key = 'sn3SWvtYXQNqgwBkEQyNg'
+consumer_secret = 'cR2GJhKzolurPYnI8pHWO7g4TlQ25UG1xpb6faPc'
+request_token_url = 'https://api.twitter.com/oauth/request_token'
+oauth_token_url = 'https://api.twitter.com/oauth/access_token'
+oauth_authorize_url = 'https://api.twitter.com/oauth/authorize'
+
+
+def dispatch(obj):
+    dq = GeloDataQueue('/var/tmp/gelo_dq')
+
+    if isinstance(obj, Tweet):
+        dq.append(obj)
+        print obj.screen_name()
+        print obj.text().encode('utf-8')
+    elif isinstance(obj, Friends):
+        print obj.friends()
+    elif isinstance(obj, DictWrapper):
+        print "unknown type received"
+        pprint.pprint(obj.json_obj)
+    elif obj == None:
+        pass
+    else:
+        print "unknown"
+    sys.stdout.flush()
+    
+def main():
+    oauth_conf = OAuthConfig('', 
+                             consumer_key,
+                             consumer_secret,
+                             request_token_url,
+                             oauth_token_url,
+                             oauth_authorize_url,
+                             os.path.expanduser('/var/tmp/.gelo_crawl_oauth'))
+    
+    client = OAuthClient(oauth_conf)
+    
+    client.do_oauth(client.code_input_stdin_callback)
+
+    user_stream = UserStream(client)
+    gen = user_stream.call()
+    print gen
+    sys.stdout.flush()
+    while True:
+        dispatch(gen.next())
+    
+if __name__ == '__main__':
+    main()
+
