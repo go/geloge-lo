@@ -14,6 +14,7 @@ def application ( environ, start_response ):
     start_response('200 OK', [('Content-Type', 'text/plain')])
 
     users = db.GqlQuery('SELECT * FROM User')
+    ret = []
     for user in users:
         ret.append(user.uid)
     return json.dumps(ret)
