@@ -29,7 +29,7 @@ def application ( environ, start_response ):
         tw_data.append(str(tw.time))
         tw_data.append(tw.text)
         if tw.lat and tw.lng:
-            tw_data.append([tw.lat, tw.lng])
+            tw_data.append([tw.lng, tw.lat])
         else:
             tw_data.append(None)
         data.append(tw_data)
