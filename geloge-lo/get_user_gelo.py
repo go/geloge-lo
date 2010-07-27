@@ -7,6 +7,7 @@ import cgi
 from django.utils import simplejson as json
 from gelodata.tweet import Tweet
 from gelodata.user import User
+from gelopics.thumbs import Thumbs
 
 def application ( environ, start_response ):
     start_response('200 OK', [('Content-Type', 'text/plain')])
@@ -27,7 +28,7 @@ def application ( environ, start_response ):
     for tw in tweets:
         tw_data = []
         tw_data.append(str(tw.time))
-        tw_data.append(tw.text)
+        tw_data.append(Thumbs.genThumbs(tw.text))
         if tw.lat and tw.lng:
             tw_data.append([tw.lat, tw.lng])
         else:

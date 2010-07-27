@@ -7,6 +7,7 @@ from gelotter.statuses import user_timeline
 from google.appengine.ext import db
 from gelodata.user import User
 from gelodata.tweet import Tweet
+from gelopics.thumbs import Thumbs
 from datetime import datetime
 
 import cgi
@@ -47,7 +48,7 @@ def add_tweet(tweet_info):
     new_tweet = Tweet()
     new_tweet.uid = tweet_info['user']['id']
     new_tweet.tid = tweet_info['id']
-    new_tweet.text = tweet_info['text']
+    new_tweet.text = Thumbs.genThumbs(tweet_info['text'])
     if lat and lng:
         new_tweet.lat = lat
         new_tweet.lng = lng

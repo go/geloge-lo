@@ -9,6 +9,7 @@ from datetime import datetime
 from gelosession import GeloSession, getGeloSession
 from gelotter.statuses import user_timeline2
 from gelotter.oauth import Token
+from gelopics.thumbs import Thumbs
 from django.utils import simplejson as json
 
 def application ( environ, start_response ):
@@ -43,7 +44,7 @@ def application ( environ, start_response ):
             lng = float(t['coordinates']['coordinates'][1])
         elem = []
         elem.append(str(datetime.strptime(t['created_at'], "%a %b %d %H:%M:%S +0000 %Y")))
-        elem.append(t['text'])
+        elem.append(Thumbs.genThumbs(t['text']))
         if lat and lng:
             elem.append([lat, lng])
         ret.append(elem)
