@@ -13,12 +13,15 @@
 </head>
 
 <body onload="initialize()">
-  <div style="width: 45%; margin: 0 auto; text-align: left;">
-    <div style="width:50%; height:95%; position: fixed; top: 1%; left: 1%; margin: 0 auto;">
+  <div class="topmenu">
+    <img class="logo" src="img/geloge-lo.png" />
+  </div>
+  <div style="margin: 0 auto; text-align: left;">
+    <div class="viewer">
       <form action="javascript:startByJSON()">
         Query<input id="account" type="text" />
-        <input type="button" value="json" onclick="javascript:startByJSON()" /><br />
-        <div id="map_canvas" style="width:100%; height:90%;"></div>
+        <input type="button" value="Search" onclick="javascript:startByJSON()" /><br />
+        <div id="map_canvas"></div>
       </form>
     </div>
     <div class="buttons">
@@ -26,6 +29,7 @@
       <input type="button" value="Prev" onclick="javascript:event_down()">
     </div>
     <div class="tweets">
+      <div class="top_space"></div>
       <div id="debug"></div>
       <div id="timeline"></div>
     </div>
