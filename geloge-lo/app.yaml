@@ -49,6 +49,8 @@ handlers:
   script: internal/add_user_to_queue.py
 - url: /internal/read_tweet_from_json
   script: internal/read_tweet_from_json.py
+- url: /internal/read_user_from_json
+  script: internal/read_user_from_json.py
 - url: /internal/user_list
   script: internal/user_list.py
 
