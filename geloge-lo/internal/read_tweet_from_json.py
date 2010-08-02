@@ -36,7 +36,8 @@ def application ( environ, start_response ):
         t = json.load(environ['wsgi.input'])
         add_tweet(t)
 
-    except:
+    except Exception, e:
+        print e
         return 'NG'
 
 
