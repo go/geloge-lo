@@ -34,7 +34,9 @@ def application ( environ, start_response ):
             tw_data.append([tw.lng, tw.lat])
         else:
             tw_data.append(None)
+        tw_data.append(tw.tid)
         data.append(tw_data)
+        
     print json.dumps(data)
 
 def main ():
