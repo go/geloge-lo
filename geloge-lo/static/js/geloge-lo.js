@@ -326,13 +326,16 @@ function addGeloMarker(geloDataGroup, geloelem){
 }
 
 function buildGeroFromJSON(result){
-    for(i in result){
-        var geloelem = new GeloElementFromJSON(result[i][0], result[i][1], result[i][2]);
-        addGeloMarker(geloDataGroup, geloelem);
+    if(result.length > 0){
+        for(i in result){
+            var geloelem = new GeloElementFromJSON(result[i][0], result[i][1], result[i][2]);
+            addGeloMarker(geloDataGroup, geloelem);
+        }
+        geloDataGroup.drawLine();
+        setPosition(geloDataGroup.geloDataList);
+        $("#account").blur();
     }
 
-    geloDataGroup.drawLine();
-    setPosition(geloDataGroup.geloDataList);
     $.unblockUI();
 }    
 

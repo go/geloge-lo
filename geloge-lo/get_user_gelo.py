@@ -10,21 +10,22 @@ from gelodata.user import User
 from gelopics.thumbs import Thumbs
 
 def application ( environ, start_response ):
+    data = []
+
     start_response('200 OK', [('Content-Type', 'text/plain')])
     form = cgi.FieldStorage(fp=environ['wsgi.input'], 
                             environ=environ)
 
     if not form.has_key('account'):
-        return "please input account"
+        return json.dumps(data)
     
     account = form['account'].value
 
     user = User.get_user(account)
     if not user:
-        return "user not found"
+        return json.dumps(data)
 
     tweets = Tweet.getTweetsByUser(user)
-    data = []
     for tw in tweets:
         tw_data = []
         tw_data.append(str(tw.time))
