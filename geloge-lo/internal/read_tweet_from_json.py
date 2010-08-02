@@ -8,7 +8,12 @@ from gelodata.tweet import Tweet
 from datetime import datetime
 from django.utils import simplejson as json
 
+class TweetAlreadyStoredException(Exception): pass
+    
 def add_tweet(tweet_info):
+    if Tweet.isStored(tweet_info['id']):
+        raise TweetAlreadyStoredException
+
     lat = None
     lng = None
     if tweet_info['coordinates']:
@@ -36,6 +41,8 @@ def application ( environ, start_response ):
         t = json.load(environ['wsgi.input'])
         add_tweet(t)
 
+    except "already stored":
+        return 'NG'        
     except Exception, e:
         print e
         return 'NG'

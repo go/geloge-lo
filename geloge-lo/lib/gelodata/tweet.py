@@ -13,4 +13,12 @@ class Tweet(db.Model):
         tweets = db.GqlQuery('SELECT * FROM Tweet WHERE uid = ' + str(user.uid) + ' ORDER BY tid DESC')
         return tweets
         
-    
+    @classmethod
+    def isStored(self, tid):
+        ret = False
+        tweets = db.GqlQuery('SELECT * FROM Tweet WHERE tid = ' + str(tid) + ' ORDER BY tid DESC')
+        if tweets.count() > 0:
+            ret = True
+        return ret
+            
+        

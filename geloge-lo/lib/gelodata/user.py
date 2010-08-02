@@ -13,3 +13,10 @@ class User(db.Model):
             ret = users[0]
             return ret
 
+    @classmethod
+    def isStored(self, uid):
+        ret = False
+        users = db.GqlQuery('SELECT * FROM User WHERE uid = ' + str(uid)) 
+        if users.count() > 0:
+            ret = True
+        return ret

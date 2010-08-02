@@ -7,7 +7,12 @@ from gelodata.user import User
 
 from django.utils import simplejson as json
 
+class UserAlreadyStoredException(Exception): pass
+
 def add_user(user_info):
+    if User.isStored(user_info['id']):
+        raise UserAlreadyStoredException
+
     new_user = User()
     new_user.uid = user_info['id']
     new_user.name = user_info['name']
