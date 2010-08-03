@@ -9,8 +9,15 @@ class Tweet(db.Model):
     time = db.DateTimeProperty()
     
     @classmethod
-    def getTweetsByUser(self, user):
-        tweets = db.GqlQuery('SELECT * FROM Tweet WHERE uid = ' + str(user.uid) + ' ORDER BY tid DESC')
+    def getTweetsByUser(self, user, limit = 1000, before_tid = None):
+        query = 'SELECT * FROM Tweet WHERE uid = ' + str(user.uid)
+        if before_tid:
+            query += ' AND tid < ' + str(before_tid)
+
+        query += ' ORDER BY tid DESC'
+        query += ' LIMIT ' + str(limit)
+
+        tweets = db.GqlQuery(query)
         return tweets
         
     @classmethod
