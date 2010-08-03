@@ -341,11 +341,11 @@ function buildGeroFromJSON(result){
 
 
 function event_up(){
-    geloDataGroup.selectNext();
+    return geloDataGroup.selectNext();
 }
 
 function event_down(){
-    geloDataGroup.selectPrev();
+    return geloDataGroup.selectPrev();
 }
 
 

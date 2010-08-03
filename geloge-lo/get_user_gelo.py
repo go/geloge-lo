@@ -11,7 +11,7 @@ from gelopics.thumbs import Thumbs
 
 def application ( environ, start_response ):
     data = []
-    num_limit = 1000
+    num_limit = 10
     before_tid = None
 
     start_response('200 OK', [('Content-Type', 'text/plain')])
@@ -59,7 +59,3 @@ def main ():
 
 if __name__ == '__main__':
   main()
-
-
-
-
