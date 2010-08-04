@@ -185,7 +185,7 @@ var GeloDataGroup = function(){
     };
 
     ret.getSlicedGeloList = function(start, end){
-        return geloDataGroup.geloDataList.slice(start, end)
+        return geloDataGroup.geloDataList.slice(start, end);
     };
 
     ret.select = function(geloData, animation){
@@ -199,8 +199,11 @@ var GeloDataGroup = function(){
     ret.selectRelative = function(diff){
         var index = this.getCurrentSelectedIndex();
         if(index  == null){
-            this.geloDataList[0].select();
-            return true;
+            if(this.geloDataList.length > 0){
+                this.geloDataList[0].select();
+                return true;
+            }
+            return false;
         }
         if(!this.geloDataList[index+diff]){
             return false;
@@ -245,6 +248,9 @@ function getBounds(A, B){
 }
 
 function setPosition(geloDataList){
+    if(geloDataList.length == 0){
+        return;
+    }
     debug(geloDataList[0].marker.position);
     var lat_max = geloDataList[0].marker.position.lat();
     var lat_min = geloDataList[0].marker.position.lat();
