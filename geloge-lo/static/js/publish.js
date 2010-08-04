@@ -26,6 +26,7 @@ function onSuccess(obj){
         $.unblockUI();        
     }
     is_processing = false;
+    $("#append").css('display', 'inherit');
 }
 function getUserGelo(url){
     var account = $("#account").val();
@@ -39,12 +40,13 @@ function getUserGelo(url){
            });
 }
 
-function appendByJSON(oldest_tid, hook){
+function appendByJSON(oldest_tid){
     is_processing = true;
     getUserGelo("/get_user_gelo.json?account=" + account + '&before_tid=' + oldest_tid);
 }
 
 function startByJSON(){
+    $("#append").css('display', 'none');
     is_processing = true;
     $("#timeline").empty();
     geloDataGroup.removeAll();

@@ -1,4 +1,5 @@
 body{ 
+    background-color: #F2EFE9;
 }
 
 .viewer{
@@ -27,13 +28,24 @@ body{
 }
 
 #timeline{ 
+    background-color: #F2EFE9;
+}
+
+#append{
+    margin-left: 35%;
+    padding-bottom: 10px;
+    width: 30%;
+    text-align: center;
+    padding: 0px;
+    border: solid 2px black;
     background-color: #fff;
+    display: none;
 }
 
 .tweet{ 
     margin: 10px;
     padding: 10px;
-    background-color: #FFF;
+    background-color: #F2EFE9;
     border-style: solid;
     border-width: 0px 0px 1px 0px;
 }
