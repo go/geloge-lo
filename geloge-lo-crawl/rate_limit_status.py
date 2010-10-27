@@ -5,7 +5,7 @@ class RateLimitStatus:
         self.client = oauth_client
 
     def call(self):
-        self.resp = self.client.do_http_request_with_oauth('GET', 'http://twitter.com/account/rate_limit_status.json')
+        self.resp = self.client.do_http_request_with_oauth('GET', 'http://api.twitter.com/1/account/rate_limit_status.json')
         json_obj = json.loads(self.resp.read())
         print json_obj
         if json_obj['remaining_hits'] == 0:

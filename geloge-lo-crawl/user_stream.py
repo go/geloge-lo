@@ -54,6 +54,7 @@ class Tweet(DictWrapper):
 class UserStream:
     def __init__(self, oauth_client, logger = None):
         self.url = 'http://betastream.twitter.com/2b/user.json'
+        self.url = 'https://userstream.twitter.com/2/user.json'
         self.client = oauth_client
 
     def logging(self, message):
